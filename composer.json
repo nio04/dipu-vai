@@ -1,0 +1,19 @@
+{
+    "name": "admin/test",
+    "autoload": {
+        "psr-4": {
+            "App\\Controllers\\": "app/controllers/",
+            "App\\Models\\": "app/models/",
+            "App\\Views\\": "app/views/",
+            "App\\Traits\\": "app/controllers/",
+            "Core\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "nio04",
+            "email": "nishatislam3108@gmail.com"
+        }
+    ],
+    "require": {}
+}
