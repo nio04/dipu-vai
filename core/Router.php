@@ -17,6 +17,7 @@ class Router {
       "/register" => AuthController::class,
       "/dashboard" => DashboardController::class,
       "/blogs" => DashboardController::class,
+      "/blogs/show" => DashboardController::class,
       "/blogs/create" => DashboardController::class,
       "/logout" => AuthController::class,
     ];
