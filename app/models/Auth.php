@@ -6,6 +6,7 @@ use Core\Model;
 use PDO;
 
 class Auth extends Model {
+
   public function login($username, $password) {
     $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
     $stmt->bindParam(':username', $username);

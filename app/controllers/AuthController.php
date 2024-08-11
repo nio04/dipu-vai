@@ -19,7 +19,6 @@ class AuthController extends Controller {
       $user = $authModel->login($username, $password);
 
       if ($user) {
-        echo 'test';
         $_SESSION['user'] = $user;
         // Redirect to home or dashboard
         header('Location: /dashboard');
@@ -81,5 +80,10 @@ class AuthController extends Controller {
       // Render registration page
       $this->view->render('register');
     }
+  }
+
+  function logout() {
+    unset($_SESSION['user']);
+    header('Location:/');
   }
 }

@@ -2,14 +2,35 @@
 
 namespace Core;
 
+use App\Controllers\HomeController;
+use App\Controllers\AuthController;
+use App\Controllers\BlogController;
+use App\Controllers\DashboardController;
+
 class Router {
   protected $routes = [];
+
+  public function __construct() {
+    $this->routes[] = [
+      "/" => HomeController::class,
+      "/login" => AuthController::class,
+      "/register" => AuthController::class,
+      "/dashboard" => DashboardController::class,
+      "/blogs" => DashboardController::class,
+      "/blogs/create" => DashboardController::class,
+      "/logout" => AuthController::class,
+    ];
+  }
 
   public function add($route, $params = []) {
     $this->routes[$route] = $params;
   }
 
   public function dispatch($url) {
+    $uri = parse_url(trim($_SERVER['REQUEST_URI'], "/"), PHP_URL_PATH);
+    $parts = explode('/', $uri);
+    $params = array_slice($parts, 1);
+
     if (array_key_exists($url, $this->routes)) {
       $controllerName = $this->routes[$url]['controller'];
       $action = $this->routes[$url]['action'];
