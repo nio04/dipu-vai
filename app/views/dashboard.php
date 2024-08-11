@@ -47,7 +47,7 @@
           <div class="bg-white shadow-md rounded-lg p-6">
             <h4 class="text-xl font-semibold mb-2 text-gray-800"><?= $blog->title ?></h4>
             <p class="text-gray-600 mb-4"><?= $blog->description ?></p>
-            <a href="/blogs/<?= $blog->id ?>" class="text-blue-500 hover:text-blue-700 font-medium">View Full Post</a>
+            <a href="/blogs/show/<?= $blog->id ?>" class="text-blue-500 hover:text-blue-700 font-medium">View Full Post</a>
           </div>
         <?php endforeach; ?>
       <?php endif; ?>
