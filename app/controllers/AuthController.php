@@ -9,6 +9,10 @@ use App\Traits\ValidationTrait;
 class AuthController extends Controller {
   use ValidationTrait;
 
+  public function index() {
+    $this->view->render('login');
+  }
+
   public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Handle login form submission

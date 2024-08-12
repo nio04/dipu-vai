@@ -8,10 +8,11 @@ use App\Controllers\BlogController;
 use App\Controllers\DashboardController;
 
 class Router {
-  protected $routes = [];
+  protected $routes;
+  protected $methodMappings;
 
   public function __construct() {
-    $this->routes[] = [
+    $this->routes = [
       "/" => HomeController::class,
       "/login" => AuthController::class,
       "/register" => AuthController::class,
@@ -19,42 +20,66 @@ class Router {
       "/blogs" => DashboardController::class,
       "/blogs/show" => DashboardController::class,
       "/blogs/create" => DashboardController::class,
+      "/blogs/edit" => DashboardController::class,
+      "/blogs/submit" => BlogController::class,
+      "/blogs/update" => DashboardController::class,
+      "/blogs/delete" => DashboardController::class,
       "/logout" => AuthController::class,
+    ];
+
+    $this->methodMappings = [
+      '/login' => 'login',
+      '/logout' => 'logout',
+      '/register' => 'register',
+      '/blogs' => 'showAllBlogs',
+      '/blogs/show' => 'showBlog',
+      '/blogs/create' => 'create',
+      "/blogs/edit" => "edit",
+      '/blogs/submit' => 'submitBlog',
+      "/blogs/update" => "updateBlog",
+      "/blogs/delete" => "delete"
     ];
   }
 
-  public function add($route, $params = []) {
-    $this->routes[$route] = $params;
-  }
+  public function dispatch() {
+    $request = trim($_SERVER['REQUEST_URI'], "/"); // Get the current URI and trim slashes
+    $parts = explode("/", $request); // Break down the URI into parts
 
-  public function dispatch($url) {
-    $uri = parse_url(trim($_SERVER['REQUEST_URI'], "/"), PHP_URL_PATH);
-    $parts = explode('/', $uri);
-    $params = array_slice($parts, 1);
+    // Find the base path without dynamic segments
+    $basePath = '/' . $parts[0];
+    if (isset($parts[1])) {
+      $basePath .= '/' . $parts[1];
+    }
 
-    if (array_key_exists($url, $this->routes)) {
-      $controllerName = $this->routes[$url]['controller'];
-      $action = $this->routes[$url]['action'];
+    // Check if the base route is registered
+    if (array_key_exists($basePath, $this->routes)) {
+      $controllerClass = $this->routes[$basePath];
 
-      // Define the namespace for controllers
-      $controllerNamespace = 'App\\Controllers\\';
-      $fullControllerName = $controllerNamespace . $controllerName;
+      // Check if the controller class exists
+      if (class_exists($controllerClass)) {
+        $controller = new $controllerClass(); // Instantiate the controller
 
-      // Check if the class exists
-      if (class_exists($fullControllerName)) {
-        $controller = new $fullControllerName();
+        // Determine the method to call based on the route or use the default 'index'
+        $methodName = $this->methodMappings[$basePath] ?? 'index';
 
-        // Check if the method exists
-        if (method_exists($controller, $action)) {
-          $controller->$action();
+        // Handle any additional parameters (dynamic segments)
+        $params = array_slice($parts, 2);
+
+        // Check if the method exists within the controller
+        if (method_exists($controller, $methodName)) {
+          // Call the method with any additional parameters
+          call_user_func_array([$controller, $methodName], $params);
         } else {
-          echo "Method $action not found in controller $fullControllerName.";
+          http_response_code(404);
+          echo "Method '{$methodName}' does not exist in controller '{$controllerClass}'.";
         }
       } else {
-        echo "Controller class $fullControllerName not found.";
+        http_response_code(404);
+        echo "Controller class '{$controllerClass}' does not exist.";
       }
     } else {
-      echo "No route matched.";
+      http_response_code(404);
+      echo "Route '{$request}' not found.";
     }
   }
 }
