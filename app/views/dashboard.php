@@ -78,6 +78,7 @@
       <?php loadView('createBlog') ?>
     <?php endif; ?>
 
+
   </main>
 
   <!-- JavaScript code -->

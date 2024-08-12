@@ -30,15 +30,21 @@ class DashboardController extends Controller {
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
   }
 
-  public function showBlog($id) {
+  public function show($id) {
     $this->blog = new Blog();
+
     $post = $this->blog->getTheBlog($id);
+
     $this->view->render('blog', ['post' => $post]);
   }
 
   public function create() {
-    // $blogData = new BlogController();
-    // $blogData->submitBlog();
+    $this->view->render('dashboard');
+  }
+
+  public function submit() {
+    $blogData = new BlogController();
+    $blogData->submitBlog();
     $this->view->render('dashboard');
   }
 

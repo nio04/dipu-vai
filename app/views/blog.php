@@ -3,7 +3,6 @@
 $tags = $post->tags;
 $tags = explode(",", $tags);
 
-
 ?>
 
 <!DOCTYPE html>
@@ -44,15 +43,6 @@ $tags = explode(",", $tags);
         <span class="inline-block bg-blue-200 text-blue-800 text-xs font-semibold rounded-full px-2 py-1 mr-2"><?= $tag ?></span>
       <?php endforeach; ?>
     </div>
-
-    <!-- Action Buttons -->
-    <!-- <div class="flex justify-end items-center">
-      <form action="/blogs/delete/<?= $post->id ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog post?');">
-        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-          Delete Blog
-        </button>
-      </form>
-    </div> -->
   </div>
 
 </body>

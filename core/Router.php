@@ -2,84 +2,67 @@
 
 namespace Core;
 
-use App\Controllers\HomeController;
-use App\Controllers\AuthController;
-use App\Controllers\BlogController;
-use App\Controllers\DashboardController;
-
 class Router {
-  protected $routes;
-  protected $methodMappings;
+  protected $routes = [];
 
-  public function __construct() {
-    $this->routes = [
-      "/" => HomeController::class,
-      "/login" => AuthController::class,
-      "/register" => AuthController::class,
-      "/dashboard" => DashboardController::class,
-      "/blogs" => DashboardController::class,
-      "/blogs/show" => DashboardController::class,
-      "/blogs/create" => DashboardController::class,
-      "/blogs/edit" => DashboardController::class,
-      "/blogs/submit" => BlogController::class,
-      "/blogs/update" => DashboardController::class,
-      "/blogs/delete" => DashboardController::class,
-      "/logout" => AuthController::class,
-    ];
-
-    $this->methodMappings = [
-      '/login' => 'login',
-      '/logout' => 'logout',
-      '/register' => 'register',
-      '/blogs' => 'showAllBlogs',
-      '/blogs/show' => 'showBlog',
-      '/blogs/create' => 'create',
-      "/blogs/edit" => "edit",
-      '/blogs/submit' => 'submitBlog',
-      "/blogs/update" => "updateBlog",
-      "/blogs/delete" => "delete"
-    ];
+  /**
+   * Add route to the Router
+   * @param string $uri The URI path (e.g., '/login', '/blogs/show').
+   * @param mixed $controllerClass controller class 
+   * @param string|null $action the action method to be call
+   * @return void
+   */
+  public function addRoute($uri, $controllerClass, $action = 'index') {
+    $uri = trim($uri, "/");
+    $this->routes[$uri] = [$controllerClass, $action];
   }
 
-  public function dispatch() {
-    $request = trim($_SERVER['REQUEST_URI'], "/"); // Get the current URI and trim slashes
-    $parts = explode("/", $request); // Break down the URI into parts
+  // dispatch the request based on the current uri
+  public function dispatch($uri) {
+    // remove leading and trailling slashes and explode it into parts
+    $uri = trim($uri, "/");
+    $uriParts = explode("/", $uri);
 
-    // Find the base path without dynamic segments
-    $basePath = '/' . $parts[0];
-    if (isset($parts[1])) {
-      $basePath .= '/' . $parts[1];
-    }
+    // get the controller name from the first part of the uri
+    $routeKey = $uriParts[0] ?? '';
 
-    // Check if the base route is registered
-    if (array_key_exists($basePath, $this->routes)) {
-      $controllerClass = $this->routes[$basePath];
+    // check if the controller exist on the route
+    if (isset($this->routes[$routeKey])) {
+      list($controllerClass, $defaultAction) = $this->routes[$routeKey];
 
-      // Check if the controller class exists
       if (class_exists($controllerClass)) {
-        $controller = new $controllerClass(); // Instantiate the controller
+        $controller = new $controllerClass();
 
-        // Determine the method to call based on the route or use the default 'index'
-        $methodName = $this->methodMappings[$basePath] ?? 'index';
+        // if there is no action then use the default action
+        $action = $uriParts[1] ??  $defaultAction;
 
-        // Handle any additional parameters (dynamic segments)
-        $params = array_slice($parts, 2);
+        // slice the params part from the uri part
+        $params = array_slice($uriParts, 2);
 
-        // Check if the method exists within the controller
-        if (method_exists($controller, $methodName)) {
-          // Call the method with any additional parameters
-          call_user_func_array([$controller, $methodName], $params);
+        // flags to store for check if params is digit or not
+        $paramIsDigit = true;
+
+        // if there is any elements on the $params array then enter on the block
+        if (count($params) > 0) {
+          // regex for checking if the param is digit or not
+          preg_match("/^\d+$/", $params[0]) ? $paramIsDigit = true : $paramIsDigit = false;
+          // if params is digit convert it and update the param variable
+          if ($paramIsDigit) {
+            $params = (int) $params[0];
+          }
+        }
+
+        if (method_exists($controller, $action)) {
+          // if method_exists then execute the method from the controller wilth param
+          call_user_func(array($controller, $action), $params);
         } else {
-          http_response_code(404);
-          echo "Method '{$methodName}' does not exist in controller '{$controllerClass}'.";
+          echo "action: $action was not found";
         }
       } else {
-        http_response_code(404);
-        echo "Controller class '{$controllerClass}' does not exist.";
+        echo "controller: $controllerClass was not found";
       }
     } else {
-      http_response_code(404);
-      echo "Route '{$request}' not found.";
+      echo "route key: $routeKey was not found";
     }
   }
 }
