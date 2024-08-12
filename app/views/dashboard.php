@@ -53,6 +53,12 @@
     <nav class="bg-blue-600 p-4 text-white flex items-center justify-between rounded-lg">
       <h1 class="text-2xl font-semibold">Welcome to your Dashboard!</h1>
       <div class="flex items-center space-x-4">
+        <?php
+        // Check if the user is logged in and the URI is '/blogs'
+        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs') {
+          echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12"> Create New Post</a>';
+        }
+        ?>
         <span class="text-lg font-bold"><?php echo htmlspecialchars($_SESSION['user']['username']); ?></span>
         <form action="/logout" method="POST" onsubmit="return confirm('Are you sure you want to logout?');">
           <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
@@ -61,12 +67,6 @@
         </form>
       </div>
     </nav>
-
-    <?php if (isset($_SESSION['blog_create_err'])): ?>
-      <div class="bg-red-500 text-white p-4 mb-4 rounded-lg">
-        <?php echo $_SESSION['blog_create_err']['field_require']; ?>
-      </div>
-    <?php endif; ?>
 
     <!-- load view all posts -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>

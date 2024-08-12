@@ -1,4 +1,12 @@
-<form action="/blogs/submit" method="POST" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-10 max-w-6xl mx-auto">
+<?php if (isset($_SESSION['blog_create_err'])): ?>
+  <div class=" w-96 bg-red-500 text-white p-4 ml-8 mt-8 rounded-lg">
+    <?php echo $_SESSION['blog_create_err']['field_require']; ?>
+    <!-- after showing error message, then unset it to not load the error message again when viewing the view -->
+    <?php unset($_SESSION['blog_create_err']) ?>
+  </div>
+<?php endif; ?>
+
+<form action="/blogs/submit" method="POST" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-2 max-w-6xl mx-auto">
   <input type="hidden" name="id">
 
   <!-- Title Field -->

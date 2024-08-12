@@ -15,9 +15,9 @@ use App\Controllers\DashboardController;
 // session_unset();
 
 
-echo ("<pre>");
+// echo ("<pre>");
 // var_dump($_SESSION);
-echo ("</pre>");
+// echo ("</pre>");
 
 $router = new Router();
 
@@ -25,13 +25,13 @@ $router->addRoute("", HomeController::class);
 $router->addRoute("/login", AuthController::class, "login");
 $router->addRoute("/register", AuthController::class, "register");
 $router->addRoute("/dashboard", DashboardController::class);
-$router->addRoute("/blogs", DashboardController::class, "showAllBlogs");
-$router->addRoute("/blogs/show", DashboardController::class,);
-$router->addRoute("/blogs/create", DashboardController::class, "create");
-$router->addRoute("/blogs/edit", DashboardController::class, "edit");
-$router->addRoute("/blogs/submit", DashboardController::class, "submit");
-$router->addRoute("/blogs/update", DashboardController::class, "updateBlog");
-$router->addRoute("/blogs/delete", DashboardController::class, "delete");
+$router->addRoute("/blogs", BlogController::class, "showAllBlogs");
+$router->addRoute("/blogs/show", BlogController::class);
+$router->addRoute("/blogs/create", BlogController::class);
+$router->addRoute("/blogs/edit", BlogController::class);
+$router->addRoute("/blogs/submit", BlogController::class);
+$router->addRoute("/blogs/update", BlogController::class);
+$router->addRoute("/blogs/delete", BlogController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
 
 $uri = $_SERVER["REQUEST_URI"];
