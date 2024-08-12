@@ -28,7 +28,7 @@
   <!-- Navbar -->
   <nav class="bg-blue-600 p-4 text-white flex items-center justify-between rounded-lg">
     <!-- Logo Link -->
-    <a href="/blogs" class="text-3xl font-bold text-yellow-400">
+    <a href="/viewallposts" class="text-3xl font-bold text-yellow-400">
       Bloggies
     </a>
     <!-- Welcome Message and Buttons -->
@@ -55,7 +55,6 @@
       <?php endif; ?>
     </div>
   </nav>
-
 
   <!-- Blog Posts -->
   <div class="p-4">

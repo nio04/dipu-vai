@@ -5,7 +5,7 @@ $tags = explode(",", $tags);
 
 
 if ($_SESSION['admin']) {
-  $goBackTo = '/dashboard';
+  $goBackTo = '/blogs';
 } else {
   $goBackTo = '/viewallposts';
 }

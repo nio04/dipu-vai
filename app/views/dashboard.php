@@ -41,7 +41,7 @@
         </li>
         <li>
           <a href="/viewallposts" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-            View All Posts
+            View All Posts as user
           </a>
         </li>
       </ul>
@@ -57,7 +57,7 @@
   <main id="mainContent" class="flex-1 p-6 transition-margin duration-300 ml-0">
     <nav class="bg-blue-600 p-4 text-white flex items-center rounded-lg">
       <!-- Logo Link -->
-      <a href="/blogs" class="text-3xl font-bold text-yellow-400 mr-6">
+      <a href="/dashboard" class="text-3xl font-bold text-yellow-400 mr-6">
         Bloggies
       </a>
       <!-- Dashboard Title -->
@@ -79,6 +79,32 @@
         </form>
       </div>
     </nav>
+
+    <!-- load dashboard homepage card -->
+    <?php if ($_SERVER['REQUEST_URI'] === "/dashboard"): ?>
+      <div class="container mx-auto p-8">
+        <!-- Card Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- View All Posts Card -->
+          <a href="/blogs" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+            <h2 class="text-2xl font-semibold mb-2">View All Posts</h2>
+            <p class="text-lg">See a list of all your blog posts.</p>
+          </a>
+
+          <!-- Create New Blog Post Card -->
+          <a href="/blogs/create" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+            <h2 class="text-2xl font-semibold mb-2">Create New Blog Post</h2>
+            <p class="text-lg">Write and publish a new blog post.</p>
+          </a>
+
+          <!-- View All Blog Posts as User Card -->
+          <a href="/viewallposts" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+            <h2 class="text-2xl font-semibold mb-2">View All Blog Posts as User</h2>
+            <p class="text-lg">Browse blog posts as a regular user.</p>
+          </a>
+        </div>
+      </div>
+    <?php endif ?>
 
 
     <!-- load view all posts -->
