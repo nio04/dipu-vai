@@ -3,6 +3,12 @@
 $tags = $post->tags;
 $tags = explode(",", $tags);
 
+
+if ($_SESSION['admin']) {
+  $goBackTo = '/dashboard';
+} else {
+  $goBackTo = '/viewallposts';
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +27,7 @@ $tags = explode(",", $tags);
 
     <!-- Back to all blogs button -->
     <div class="mb-6">
-      <a href="/blogs" class="text-blue-600 hover:underline">← Back to all blogs</a>
+      <a href="<?php echo $goBackTo ?>" class="text-blue-600 hover:underline">← Back to all blogs</a>
     </div>
 
     <!-- Blog Title -->

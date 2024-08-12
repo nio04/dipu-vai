@@ -39,6 +39,11 @@
             </li>
           </ul>
         </li>
+        <li>
+          <a href="/viewallposts" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+            View All Posts
+          </a>
+        </li>
       </ul>
     </div>
   </aside>

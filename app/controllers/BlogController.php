@@ -12,11 +12,14 @@ class BlogController extends Controller {
 
   public $blog;
 
+  // for dashboard
   public function showAllBlogs() {
     $this->blog = new Blog();
     $allBlogs = $this->blog->getAllBlogs();
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
   }
+
+  // not for dashboard
   public function viewallposts() {
     $this->blog = new Blog();
     $allBlogs = $this->blog->getAllBlogs();

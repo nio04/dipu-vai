@@ -47,6 +47,7 @@ class AuthController extends Controller {
         $this->view->render('login', ['error' => 'Invalid username or password.']);
         exit;
       } else {
+        $_SESSION['user'] = $user;
         // redirect the non admin to [not dashboard] page
         header("Location: /viewallposts");
       }
