@@ -17,6 +17,11 @@ class BlogController extends Controller {
     $allBlogs = $this->blog->getAllBlogs();
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
   }
+  public function viewallposts() {
+    $this->blog = new Blog();
+    $allBlogs = $this->blog->getAllBlogs();
+    $this->view->render('viewallposts', ['blogs' => $allBlogs]);
+  }
 
   public function show($id) {
     $this->blog = new Blog();

@@ -16,19 +16,39 @@ class AuthController extends Controller {
   public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Handle login form submission
-      $username = $_POST['username'];
-      $password = $_POST['password'];
+      $username = $this->sanitizeInput($_POST['username']);
+      $password = $this->sanitizeInput($_POST['password']);
+      $additionlToken = $this->sanitizeInput($_POST['additional_token']);
 
-      $authModel = new Auth();
-      $user = $authModel->login($username, $password);
+      $isAdmin = $additionlToken === "1234" ? true : false;
 
-      if ($user) {
+      if ($isAdmin) {
+        $_SESSION['admin'] = true;
+      } else {
+        $_SESSION['admin'] = false;
+      }
+
+      $empty = $this->checkEmpty([$username, $password]);
+
+      if ($empty === true) {
+        $authModel = new Auth();
+        $user = $authModel->login($username, $password);
+      } else {
+        $this->view->render('login', ['error' => 'email or password can not be empty']);
+        exit;
+      }
+
+      if ($user && $empty && $isAdmin) {
         $_SESSION['user'] = $user;
         // Redirect to home or dashboard
         header('Location: /dashboard');
         exit;
-      } else {
+      } else if (!$user) {
         $this->view->render('login', ['error' => 'Invalid username or password.']);
+        exit;
+      } else {
+        // redirect the non admin to [not dashboard] page
+        header("Location: /viewallposts");
       }
     } else {
       // Render login page

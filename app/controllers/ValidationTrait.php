@@ -21,6 +21,19 @@ trait ValidationTrait {
     //     return preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/', $password);
     // }
 
+    /**
+     * if return yes, meaning all the required fields are filled up
+     * if retrun false, meaning required fields were not filled up
+     */
+    public function checkEmpty($fields) {
+        foreach ($fields as $field) {
+            if (empty($field)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function validateRequiredFields(array $input, array $requiredFields): bool {
         foreach ($requiredFields as $field) {
             if (empty($input[$field])) {

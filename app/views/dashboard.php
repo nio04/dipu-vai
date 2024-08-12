@@ -50,13 +50,20 @@
 
   <!-- Main content -->
   <main id="mainContent" class="flex-1 p-6 transition-margin duration-300 ml-0">
-    <nav class="bg-blue-600 p-4 text-white flex items-center justify-between rounded-lg">
-      <h1 class="text-2xl font-semibold">Welcome to your Dashboard!</h1>
+    <nav class="bg-blue-600 p-4 text-white flex items-center rounded-lg">
+      <!-- Logo Link -->
+      <a href="/blogs" class="text-3xl font-bold text-yellow-400 mr-6">
+        Bloggies
+      </a>
+      <!-- Dashboard Title -->
+      <h1 class="text-2xl font-semibold mr-auto">Welcome to your Dashboard!</h1>
       <div class="flex items-center space-x-4">
         <?php
         // Check if the user is logged in and the URI is '/blogs'
-        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs') {
-          echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12"> Create New Post</a>';
+        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs' || $_SERVER['REQUEST_URI'] === '/dashboard') {
+          echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
+                    Create New Post
+                  </a>';
         }
         ?>
         <span class="text-lg font-bold"><?php echo htmlspecialchars($_SESSION['user']['username']); ?></span>
@@ -67,6 +74,7 @@
         </form>
       </div>
     </nav>
+
 
     <!-- load view all posts -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>

@@ -24,9 +24,10 @@ $router = new Router();
 $router->addRoute("", HomeController::class);
 $router->addRoute("/login", AuthController::class, "login");
 $router->addRoute("/register", AuthController::class, "register");
+$router->addRoute("/viewallposts", BlogController::class, "viewallposts");
 $router->addRoute("/dashboard", DashboardController::class);
 $router->addRoute("/blogs", BlogController::class, "showAllBlogs");
-$router->addRoute("/blogs/show", BlogController::class);
+$router->addRoute("/blogs/show", BlogController::class); // single blog post
 $router->addRoute("/blogs/create", BlogController::class);
 $router->addRoute("/blogs/edit", BlogController::class);
 $router->addRoute("/blogs/submit", BlogController::class);
