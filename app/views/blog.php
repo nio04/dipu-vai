@@ -3,11 +3,10 @@
 $tags = $blog->tags;
 $tags = explode(",", $tags);
 
-
-if ($_SESSION['admin']) {
-  $goBackTo = '/blogs';
-} else {
+if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
   $goBackTo = '/viewallposts';
+} else {
+  $goBackTo = '/';
 }
 
 ?>
@@ -30,11 +29,17 @@ if ($_SESSION['admin']) {
       <a href="<?php echo $goBackTo ?>" class="text-blue-600 hover:underline">← Back to all blogs</a>
     </div>
 
+    <!-- cover image -->
+    <div class="object-cover h-80 my-12 ">
+      <img class="h-full w-full rounded-md" src="<?= $blog->image ?>" alt="<?= $blog->title ?>">
+    </div>
+
     <!-- Blog Title -->
     <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= $blog->title ?></h1>
 
     <!-- Meta Information -->
-    <p class="text-gray-600 text-sm mb-2">Created at: <span class="text-gray-800"><?= $blog->created_at ?></span></p>
+    <p class="text-gray-500 text-sm mb-2">Created at: <span class="text-gray-500"><?= $blog->created_at ?></span> </p>
+    <p class="text-gray-500 text-sm mb-2 -mt-2">Author name: <span class="text-gray-500"><?= $blog->author->username ?></span> </p>
 
     <!-- Blog Description -->
     <div class="text-gray-700 leading-relaxed my-6">
@@ -50,43 +55,57 @@ if ($_SESSION['admin']) {
     </div>
 
     <?php
-    $isLiked = $blog->user_id === $_SESSION['user']['id'] ? true : false;
+    // $isLiked = $blog->user_id === $_SESSION['user']['id'] ? true : false;
+    $isLiked = $already_liked;
     ?>
 
-    <!-- like container -->
-    <div class="flex items-center space-x-2 mt-8">
-      <a href="<?php echo $isLiked ? 'javascript:void(0);' : '/blogs/like/' . $blog->id; ?>"
-        class="inline-block px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-300 
+    <?php if (isset($_SESSION['user'])): ?>
+      <!-- like container -->
+      <div class="flex items-center space-x-2 mt-8">
+        <a href="<?php echo $isLiked ? 'javascript:void(0);' : '/blogs/like/' . $blog->id; ?>"
+          class="inline-block px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-300 
    <?php echo $isLiked ? 'bg-green-500 cursor-not-allowed' : 'bg-gray-400 hover:bg-gray-500'; ?>"
-        <?php echo $isLiked ? 'aria-disabled="true" tabindex="-1"' : ''; ?>>
-        <?php echo $isLiked ? 'Liked' : 'Like'; ?>
-      </a>
+          <?php echo $isLiked ? 'aria-disabled="true" tabindex="-1"' : ''; ?>>
+          <?php echo $isLiked ? 'Liked' : 'Like'; ?>
+        </a>
+
+        <!-- make the link disable so when $isliked is true otherwise do not disable it -->
+        <!-- Like Count -->
+        <span class="text-lg font-semibold text-gray-700">
+          <?php echo $blog->like_count; ?> Like<?php echo $blog->like_count == 1 ? '' : 's'; ?>
+        </span>
+      </div>
+
+    <?php else: ?>
+      <!-- Message for Non-Logged-In Users -->
+      <p class="text-gray-700 text-xl font-semibold mt-16 mb-16">Please <a href="/login" class="text-blue-500 hover:underline">log in</a> to like the blog.</p>
+    <?php endif; ?>
 
 
-      <!-- make the link disable so when $isliked is true otherwise do not disable it -->
+    <!-- check if user is logged in to render comment container or log message -->
 
-      <!-- Like Count -->
-      <span class="text-lg font-semibold text-gray-700">
-        <?php echo $blog->like_count; ?> Like<?php echo $blog->like_count == 1 ? '' : 's'; ?>
-      </span>
-    </div>
+    <?php if (isset($_SESSION['user'])): ?>
+      <!-- Comment Container -->
+      <form action="/blogs/createComment/<?php echo $blog->id ?>" method="POST" class="mt-16 mb-16 p-4 bg-white rounded-lg shadow-lg flex flex-col">
+        <!-- Write Comment Section -->
+        <h4 class="text-xl font-semibold text-gray-800 mb-4">Write Comment</h4>
 
-    <!-- comment container -->
-    <form action="/blogs/createComment/<?php echo $blog->id ?>" method="POST" class="mt-16 mb-16 p-4 bg-white rounded-lg shadow-lg flex flex-col">
-      <!-- Write Comment Section -->
-      <h4 class="text-xl font-semibold text-gray-800 mb-4">Write Comment</h4>
+        <!-- Comment Textarea -->
+        <textarea
+          class="w-full p-3 text-gray-800 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+          rows="5"
+          placeholder="Add your comment..." name="comment"></textarea>
 
-      <!-- Comment Textarea -->
-      <textarea
-        class="w-full p-3 text-gray-800 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
-        rows="5"
-        placeholder="Add your comment..." name="comment"></textarea>
+        <!-- Add Comment Button -->
+        <button class="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-green-600">
+          Add Comment
+        </button>
+      </form>
+    <?php else: ?>
+      <!-- Message for Non-Logged-In Users -->
+      <p class="text-gray-700 text-xl font-semibold mt-16 mb-16">Please <a href="/login" class="text-blue-500 hover:underline">log in</a> to add a comment.</p>
+    <?php endif; ?>
 
-      <!-- Add Comment Button -->
-      <button class="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-green-600">
-        Add Comment
-      </button>
-    </form>
 
     <!-- Existing Comments Section -->
     <div class="mt-8 p-4 bg-white rounded-lg shadow-lg">

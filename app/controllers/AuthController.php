@@ -40,16 +40,21 @@ class AuthController extends Controller {
 
       if ($user && $empty && $isAdmin) {
         $_SESSION['user'] = $user;
+        $_SESSION['admin'] = true;
         // Redirect to home or dashboard
         header('Location: /dashboard');
         exit;
       } else if (!$user) {
         $this->view->render('login', ['error' => 'Invalid username or password.']);
         exit;
-      } else {
+      } else if ($user && $empty && !$isAdmin) {
         $_SESSION['user'] = $user;
+        $_SESSION['admin'] = false;
         // redirect the non admin to [not dashboard] page
         header("Location: /viewallposts");
+      } else {
+        // Render login page
+        $this->view->render('login');
       }
     } else {
       // Render login page
@@ -109,6 +114,7 @@ class AuthController extends Controller {
 
   function logout() {
     unset($_SESSION['user']);
+    unset($_SESSION['admin']);
     header('Location:/');
   }
 }

@@ -38,4 +38,19 @@ class Model {
       return $stmt->rowCount();
     }
   }
+
+  function likeBlogPost($data) {
+
+    $stmt = $this->db->prepare("INSERT INTO likes (user_id, blog_id) VALUES (:user_id, :blog_id)
+                           ON DUPLICATE KEY UPDATE created_at = CURRENT_TIMESTAMP");
+
+    foreach ($data as $placeholder => $value) {
+      $stmt->bindValue(':' . $placeholder, $value);
+    }
+
+    // $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    // $stmt->bindValue(':blog_id', $blogId, PDO::PARAM_INT);
+
+    return $stmt->execute() ? true : false;
+  }
 }

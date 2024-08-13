@@ -1,15 +1,10 @@
-<?php
-
-
-?>
-
 <div class="space-y-8 p-6">
   <?php if (isset($blogs)) : ?>
     <?php foreach ($blogs as $blog): ?>
       <div class="bg-white shadow-md rounded-lg p-6 flex justify-between items-center">
 
         <!-- Left Side: Title and Description -->
-        <div>
+        <div class="w-9/12">
           <h4 class="text-xl font-semibold mb-2 text-gray-800"><?= $blog->title ?></h4>
           <p class="text-gray-600 mb-4"><?= $blog->description ?></p>
         </div>

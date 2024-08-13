@@ -23,8 +23,43 @@ class Blog {
     return $this->db->query('SELECT * FROM blogs WHERE id = :id', $data, 'single');
   }
 
-  public function updateLike($data) {
-    return $this->db->query("UPDATE blogs SET like_count = :like_count, user_id = :user_id WHERE id = :id", $data);
+  public function fetchAuthorName($id) {
+    $data = [
+      'id' => $id
+    ];
+
+    return $this->db->query("SELECT username, id FROM users WHERE id = :id", $data, "single");
+  }
+
+  function registerLike($blog_id, $user_id) {
+    $data = [
+      'user_id' => $user_id,
+      'blog_id' => $blog_id
+    ];
+
+    return $this->db->likeBlogPost($data);
+  }
+
+  function checkLiked($blog_id, $user_id) {
+    $data = [
+      'blog_id' => $blog_id,
+      'user_id' => $user_id
+    ];
+
+    return $this->db->query("SELECT id FROM likes WHERE user_id = :user_id AND blog_id = :blog_id", $data, "single");
+  }
+
+  function getLikeCountForTheBlog($id) {
+    $data = [
+      'id' => $id
+    ];
+
+    return $this->db->query('SELECT like_count from blogs WHERE id = :id', $data, 'single');
+  }
+
+  public function likeCountIncreament($id, $count) {
+    $data = ['id' => $id, 'like_count' => (int) $count];
+    return $this->db->query("UPDATE blogs SET like_count = :like_count WHERE id = :id", $data);
   }
 
   public function loadCommentForBlog($id) {

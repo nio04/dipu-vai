@@ -27,6 +27,29 @@ class BlogController extends Controller {
   // not for dashboard
   public function viewallposts() {
     $allBlogs = $this->blog->getAllBlogs();
+
+    // Prepare all blog IDs to get the author name
+    $allBlogsId = [];
+
+    foreach ($allBlogs as $value) {
+      // Directly add the user_id to the array
+      $allBlogsId[] = $value->user_id;
+    }
+
+    // get author name method
+    $authorNames = $this->getBlogAuthorName($allBlogsId);
+
+    // Loop through allBlogs and match user_id with authorNames
+    foreach ($allBlogs as $blog) {
+      foreach ($authorNames as $author) {
+        if ($blog->user_id === $author->id) {
+          // Add the matched author object to the current blog object
+          $blog->author = $author;
+          break; // Exit inner loop once match is found
+        }
+      }
+    }
+
     $this->view->render('viewallposts', ['blogs' => $allBlogs]);
   }
 
@@ -34,53 +57,99 @@ class BlogController extends Controller {
     // load the post data
     $blog = $this->blog->getTheBlog($id);
 
+    // load author name
+    $authorName = $this->getBlogAuthorName([$blog->user_id]);
+
+    // Loop through allBlogs and match user_id with authorNames
+    foreach ($blog as $b) {
+      foreach ($authorName as $author) {
+        if ($blog->user_id === $author->id) {
+          // Add the matched author object to the current blog object
+          $blog->author = $author;
+          break; // Exit inner loop once match is found
+        }
+      }
+    }
+
+    // check if current user alredy liked the blogpost or not
+    $checkLike = $this->hasAlreadyLiked($blog->id, $_SESSION['user']['id']);
+
+    // set true or false based on the return of $checkLike
+    $checkLike = $checkLike ? true : false;
+
     // load comments
     $comments = $this->loadComments($id);
 
     // load username for the comments
-    $usernameForComments = $this->loadUsernameForCommnet($comments);
+    $usernameForComments = $this->loadUsernameForComment($comments);
 
     // render specific blog view
-    $this->view->render('blog', ['blog' => $blog, 'comments' => $usernameForComments]);
+    $this->view->render('blog', ['blog' => $blog, 'comments' => $usernameForComments, 'already_liked' => $checkLike]);
+  }
+
+  public function getBlogAuthorName($blog) {
+    $authorNames = [];
+
+    foreach ($blog as $value) {
+      $authorNames[] = $this->blog->fetchAuthorName($value);
+    }
+
+    return $authorNames;
+  }
+
+  function hasAlreadyLiked($blog_id, $user_id) {
+    return $this->blog->checkLiked($blog_id, $user_id);
   }
 
   public function loadComments($id) {
     return $this->blog->loadCommentForBlog($id);
   }
 
-  public function loadUsernameForCommnet($comments) {
+  public function loadUsernameForComment($comments) {
     $user = new User();
     $user_id = [];
     $username = [];
 
-    // get all the userid from comments
+    // Get all the user IDs from comments
     foreach ($comments as $comment) {
       $user_id[] = $comment->user_id;
     }
 
-    // get username from DB & store
+    // Get usernames from DB & store them
     foreach ($user_id as $id) {
       $username[] = $user->getUser($id);
     }
 
-    // store both  comments and username in array of object
+    // Store both comments and usernames in an array of objects
     $combineCommentAndUsername = [];
 
-    foreach ($username as $user) {
-      foreach ($comments as $comment) {
+    foreach ($comments as $comment) {
+      foreach ($username as $user) {
         if ($user->id === $comment->user_id) {
-          // Push an array containing both the comment and user data as objects into $newData
-          $combineCommentAndUsername[] = [
-            'comment' => (object) $comment,
-            'user' => (object) $user
-          ];
+          // Check if the comment with the current ID already exists in the array
+          $exists = false;
+          foreach ($combineCommentAndUsername as $existingEntry) {
+            if ($existingEntry['comment']->id === $comment->id) {
+              $exists = true;
+              break;
+            }
+          }
+
+          // If not exists, add the comment and user data to the array
+          if (!$exists) {
+            $combineCommentAndUsername[] = [
+              'comment' => (object) $comment,
+              'user' => (object) $user
+            ];
+          }
         }
       }
     }
 
-
     return $combineCommentAndUsername;
   }
+
+  // here before adding to the $combineCommentAndUsername array check if array of array as comment key then in object check if the current id already in this $combineCommentAndUsername array or not. below  i am providing the method which perform the array adding and then i provide you array sample output 
 
   public function createComment($id) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -98,26 +167,21 @@ class BlogController extends Controller {
   }
 
   public function like($id) {
-    // get the current blog like count.
-    $post = $this->blog->getTheBlog($id);
+    // register the like to the database
+    $this->blog->registerLike($id, $_SESSION['user']['id']);
 
-    // echo ("<pre>");
-    // var_dump($post);
-    // echo ("</pre>");
+    // get the current like count from table with blog id
+    $oldLikeCount = $this->getCountLike($id);
 
-    // update like count
-    $oldLikeCount = $post->like_count;
-    $newLikeCount = $oldLikeCount + 1;
+    $LikeCountIncrease = $oldLikeCount->like_count + 1;
 
-    // push the data to database
-    $data = [
-      'id' => $id,
-      'like_count' => $newLikeCount,
-      'user_id' => $_SESSION['user']['id']
-    ];
-    $this->blog->updateLike($data);
-
+    // increae the like count to blogs table
+    $this->blog->likeCountIncreament($id, $LikeCountIncrease);
     header("Location:/blogs/show/$id");
+  }
+
+  function getCountLike($id) {
+    return $this->blog->getLikeCountForTheBlog($id);
   }
 
   public function create() {
