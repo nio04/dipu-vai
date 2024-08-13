@@ -11,8 +11,8 @@
 
 <body class="bg-gray-100 flex">
 
-  <!-- Sidebar -->
-  <aside id="sidebar" class="w-64 bg-white shadow-lg rounded-lg sticky top-0 h-screen z-10 relative transition-transform transform -translate-x-64">
+  <!-- sidebar -->
+  <aside id="sidebar" class="w-64 bg-white shadow-lg rounded-lg sticky top-0 h-screen z-10 relative transition-transform transform">
     <button id="closeSidebarButton" class="absolute top-4 right-4 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 focus:outline-none w-8 h-8 flex items-center justify-center">
       <span class="text-xl">×</span>
     </button>
@@ -35,6 +35,47 @@
             <li>
               <a href="/blogs/create" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
                 Create Post
+              </a>
+            </li>
+          </ul>
+        </li>
+        <!-- CATEGORY DROPDOWN MENU -->
+        <li>
+          <button id="menuDropdownButton" class="w-full text-left bg-gray-200 px-4 py-2 rounded-md focus:outline-none hover:bg-gray-300">
+            Categories
+            <svg class="w-5 h-5 inline-block float-right" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <ul id="menuDropdown" class="mt-2 hidden bg-gray-100 rounded-lg space-y-2">
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                Howto
+              </a>
+            </li>
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                Guide
+              </a>
+            </li>
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                DIY
+              </a>
+            </li>
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                Novel
+              </a>
+            </li>
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                Picture Story
+              </a>
+            </li>
+            <li>
+              <a href="#" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+                Analysis Report
               </a>
             </li>
           </ul>
@@ -159,6 +200,11 @@
         mainContent.classList.remove('ml-64');
         openSidebarButton.classList.remove('hidden');
       });
+    });
+
+    // Toggle visibility for Menu dropdown
+    document.getElementById('menuDropdownButton').addEventListener('click', function() {
+      document.getElementById('menuDropdown').classList.toggle('hidden');
     });
   </script>
 

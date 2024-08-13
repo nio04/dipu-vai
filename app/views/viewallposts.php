@@ -26,12 +26,31 @@
   $isAdmin = isset($_SESSION['admin']) && $_SESSION['admin'];
   ?>
 
-  <!-- Navbar -->
   <nav class="bg-blue-600 p-4 text-white flex items-center justify-between rounded-lg">
     <!-- Logo Link -->
     <a href="/viewallposts" class="text-3xl font-bold text-yellow-400">
       Bloggies
     </a>
+
+    <!-- Dropdown Menu -->
+    <div class="relative mr-auto ml-8">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+        <span>Menu</span>
+        <svg class="fill-current h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M0 0h20v20H0z" fill="none" />
+          <path d="M7 10l5 5 5-5H7z" />
+        </svg>
+      </button>
+      <ul class="dropdown-menu absolute hidden text-gray-700 pt-1 bg-white rounded shadow-lg w-48 z-10 transition-all">
+        <li class=""><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Howto</a></li>
+        <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Guide</a></li>
+        <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">DIY</a></li>
+        <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Novel</a></li>
+        <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Picture Story</a></li>
+        <li class=""><a class="rounded-b bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Analysis Report</a></li>
+      </ul>
+    </div>
+
     <!-- Welcome Message and Buttons -->
     <div class="flex items-center space-x-4">
       <?php if ($isAdmin): ?>
@@ -80,6 +99,18 @@
 
     <?php endforeach; ?>
   </div>
+
+  <script>
+    // Show the dropdown menu on hover
+    document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseenter', function() {
+      this.querySelector('.dropdown-menu').classList.remove('hidden');
+    });
+
+    // Hide the dropdown menu when not hovering
+    document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseleave', function() {
+      this.querySelector('.dropdown-menu').classList.add('hidden');
+    });
+  </script>
 </body>
 
 </html>
