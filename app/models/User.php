@@ -6,6 +6,8 @@ use Core\Model;
 use PDO;
 
 class User extends Model {
+  public $db;
+
   public function getUserByEmail($email) {
     $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->bindParam(':email', $email);
@@ -20,5 +22,16 @@ class User extends Model {
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':password', $hashedPassword);
     return $stmt->execute();
+  }
+
+  public function getUser($id) {
+    $this->db = new Model();
+    $data = ['id' => $id];
+
+    return $this->db->query("SELECT username, id FROM users WHERE id = :id", $data, "single");
+
+    echo ("<pre>");
+    // var_dump($t);
+    echo ("</pre>");
   }
 }

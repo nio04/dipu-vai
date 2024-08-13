@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use App\Traits\ValidationTrait;
 use Core\Controller;
 use Core\Model;
@@ -12,25 +13,111 @@ class BlogController extends Controller {
 
   public $blog;
 
+  public function __construct() {
+    $this->blog = new Blog();
+    parent::__construct();
+  }
+
   // for dashboard
   public function showAllBlogs() {
-    $this->blog = new Blog();
     $allBlogs = $this->blog->getAllBlogs();
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
   }
 
   // not for dashboard
   public function viewallposts() {
-    $this->blog = new Blog();
     $allBlogs = $this->blog->getAllBlogs();
     $this->view->render('viewallposts', ['blogs' => $allBlogs]);
   }
 
   public function show($id) {
-    $this->blog = new Blog();
+    // load the post data
+    $blog = $this->blog->getTheBlog($id);
+
+    // load comments
+    $comments = $this->loadComments($id);
+
+    // load username for the comments
+    $usernameForComments = $this->loadUsernameForCommnet($comments);
+
+    // render specific blog view
+    $this->view->render('blog', ['blog' => $blog, 'comments' => $usernameForComments]);
+  }
+
+  public function loadComments($id) {
+    return $this->blog->loadCommentForBlog($id);
+  }
+
+  public function loadUsernameForCommnet($comments) {
+    $user = new User();
+    $user_id = [];
+    $username = [];
+
+    // get all the userid from comments
+    foreach ($comments as $comment) {
+      $user_id[] = $comment->user_id;
+    }
+
+    // get username from DB & store
+    foreach ($user_id as $id) {
+      $username[] = $user->getUser($id);
+    }
+
+    // store both  comments and username in array of object
+    $combineCommentAndUsername = [];
+
+    foreach ($username as $user) {
+      foreach ($comments as $comment) {
+        if ($user->id === $comment->user_id) {
+          // Push an array containing both the comment and user data as objects into $newData
+          $combineCommentAndUsername[] = [
+            'comment' => (object) $comment,
+            'user' => (object) $user
+          ];
+        }
+      }
+    }
+
+
+    return $combineCommentAndUsername;
+  }
+
+  public function createComment($id) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $commentData = $this->sanitizeInput($_POST['comment']);
+      // $commentData = $this->checkEmpty([$commentData]);
+
+      if ($commentData) {
+        $this->blog->createCommnentForBlog($id, $commentData);
+        header('location: /blogs/show/' . $id);
+      } else {
+        header('location: /blogs/show/' . $id);
+        // show error
+      }
+    }
+  }
+
+  public function like($id) {
+    // get the current blog like count.
     $post = $this->blog->getTheBlog($id);
 
-    $this->view->render('blog', ['post' => $post]);
+    // echo ("<pre>");
+    // var_dump($post);
+    // echo ("</pre>");
+
+    // update like count
+    $oldLikeCount = $post->like_count;
+    $newLikeCount = $oldLikeCount + 1;
+
+    // push the data to database
+    $data = [
+      'id' => $id,
+      'like_count' => $newLikeCount,
+      'user_id' => $_SESSION['user']['id']
+    ];
+    $this->blog->updateLike($data);
+
+    header("Location:/blogs/show/$id");
   }
 
   public function create() {
@@ -39,26 +126,22 @@ class BlogController extends Controller {
 
   public function edit($id) {
     // fetch data from the database by id   
-    $this->blog = new Blog();
     $post = $this->blog->getTheBlog($id);
     // load a new view and pass the fetched data
     $this->view->render("edit", ["post" => $post]);
   }
 
   public function update() {
-    $this->blog = new Blog();
     $this->blog->update($_POST);
     header("Location: /blogs");
   }
 
   public function delete($id) {
-    $this->blog = new Blog();
     $post = $this->blog->deleteTheBlog($id);
     header("Location: /blogs");
   }
 
   public function submit() {
-    // $blogData = new BlogController();
     $this->submitBlog();
     $this->view->render('dashboard');
   }
