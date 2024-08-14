@@ -25,6 +25,8 @@ $router->addRoute("", HomeController::class);
 $router->addRoute("/login", AuthController::class, "login");
 $router->addRoute("/register", AuthController::class, "register");
 $router->addRoute("/viewallposts", BlogController::class, "viewallposts"); // for non-admin
+$router->addRoute("/blogs/search", BlogController::class);
+$router->addRoute("/blogs/sort", BlogController::class);
 $router->addRoute("/dashboard", DashboardController::class);
 $router->addRoute("/blogs", BlogController::class, "showAllBlogs"); // for admin
 $router->addRoute("/blogs/show", BlogController::class); // single blog post
@@ -36,8 +38,7 @@ $router->addRoute("/blogs/submit", BlogController::class);  // submit blog
 $router->addRoute("/blogs/update", BlogController::class);
 $router->addRoute("/blogs/delete", BlogController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
-// ALL THE BLOG POST CATEGORY
-$router->addRoute("/blogs/category/general", BlogController::class);
+$router->addRoute("/blogs/category", BlogController::class);
 
 
 $uri = $_SERVER["REQUEST_URI"];

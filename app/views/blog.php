@@ -38,7 +38,7 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
     <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= $blog->title ?></h1>
 
     <!-- Meta Information -->
-    <p class="text-gray-500 text-sm mb-2">Created at: <span class="text-gray-500"><?= $blog->created_at ?></span> </p>
+    <p class="text-gray-500 text-sm mb-2">Created at: <span class="text-gray-500"><?= additionalDateFormatter($blog->created_at)  ?></span> </p>
     <p class="text-gray-500 text-sm mb-2 -mt-2">Author name: <span class="text-gray-500"><?= $blog->author->username ?></span> </p>
 
     <!-- Blog Description -->

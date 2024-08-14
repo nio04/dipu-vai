@@ -22,6 +22,7 @@ class AuthController extends Controller {
 
       $isAdmin = $additionlToken === "1234" ? true : false;
 
+
       if ($isAdmin) {
         $_SESSION['settings']['admin'] = true;
       } else {
@@ -30,7 +31,7 @@ class AuthController extends Controller {
 
       $empty = $this->checkEmpty([$username, $password]);
 
-      if ($empty === true) {
+      if ($empty && count($empty) > 0) {
         $authModel = new Auth();
         $user = $authModel->login($username, $password);
       } else {

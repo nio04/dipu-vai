@@ -39,51 +39,12 @@
             </li>
           </ul>
         </li>
-        <!-- CATEGORY DROPDOWN MENU -->
+
+        <!-- category link -->
         <li>
-          <button id="menuDropdownButton" class="w-full text-left bg-gray-200 px-4 py-2 rounded-md focus:outline-none hover:bg-gray-300">
+          <a href="/blogs/category" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 underline underline-offset-8">
             Categories
-            <svg class="w-5 h-5 inline-block float-right" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <ul id="menuDropdown" class="mt-2 hidden bg-gray-200 rounded-lg space-y-2">
-            <li>
-              <a href="/blogs/category/general" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                General
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/howto" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                Howto
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/guide" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                Guide
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/diy" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                DIY
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/novel" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                Novel
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/picture_story" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                Picture Story
-              </a>
-            </li>
-            <li>
-              <a href="/blogs/category/analysis_report" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                Analysis Report
-              </a>
-            </li>
-          </ul>
+          </a>
         </li>
         <!-- another link -->
         <li>
@@ -154,39 +115,6 @@
     <?php endif ?>
 
 
-    <!-- load category page: general -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/general"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: howto -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/howto"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: guide -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/guide"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: diy -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/diy"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: novel -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/novel"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: picture story -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/picture_story"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-    <!-- load category page: analysis_report -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category/analysis_report"): ?>
-      <?php loadView("category", ['categoryBlogs' => $categoryBlogs, 'categoryId' => $categoryId]) ?>
-    <?php endif; ?>
-
-
-
-
-
     <!-- load view all posts -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>
       <?php loadView('viewAllBlogs', ['blogs' => $blogs]) ?>
@@ -196,6 +124,11 @@
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs/create'): ?>
       <?php loadView('createBlog') ?>
     <?php endif; ?>
+
+    <!-- load category view -->
+    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category"): ?>
+      <?php loadView("category") ?>
+    <?php endif ?>
 
 
   </main>

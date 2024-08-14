@@ -39,6 +39,17 @@ class Model {
     }
   }
 
+  function sort_asc() {
+    $stmt = $this->db->query("SELECT * FROM blogs ORDER BY title ASC");
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+  }
+  function sort_desc() {
+    $stmt = $this->db->query("SELECT * FROM blogs ORDER BY title DESC");
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  // register blog_id, user_id to the table: likes.
+  // for later checking if the current user liked the current blog post
   function likeBlogPost($data) {
 
     $stmt = $this->db->prepare("INSERT INTO likes (user_id, blog_id) VALUES (:user_id, :blog_id)
@@ -47,9 +58,6 @@ class Model {
     foreach ($data as $placeholder => $value) {
       $stmt->bindValue(':' . $placeholder, $value);
     }
-
-    // $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
-    // $stmt->bindValue(':blog_id', $blogId, PDO::PARAM_INT);
 
     return $stmt->execute() ? true : false;
   }

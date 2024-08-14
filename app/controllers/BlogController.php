@@ -24,10 +24,8 @@ class BlogController extends Controller {
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
   }
 
-  // not for dashboard
-  public function viewallposts() {
-    $allBlogs = $this->blog->getAllBlogs();
-
+  // helper class: add author object [name & id] to the blogs 
+  function appendAuthorToBlog($allBlogs) {
     // Prepare all blog IDs to get the author name
     $allBlogsId = [];
 
@@ -50,6 +48,16 @@ class BlogController extends Controller {
       }
     }
 
+    return $allBlogs;
+  }
+
+  // not for dashboard
+  public function viewallposts() {
+    $allBlogs = $this->blog->getAllBlogs();
+
+    // add author object to the blog object [append]
+    $allBlogs = $this->appendAuthorToBlog($allBlogs,);
+
     $this->view->render('viewallposts', ['blogs' => $allBlogs]);
   }
 
@@ -57,9 +65,43 @@ class BlogController extends Controller {
   function category($id) {
 
     // query to find(search) category data on the database [multiple blogs]
-    $blogs = $this->blog->findCategory($id);
+    // $blogs = $this->blog->findCategory($id);
 
-    $this->view->render('dashboard', ['categoryBlogs' => $blogs, 'categoryId' => $id]);
+    $this->view->render('dashboard', ['id' => $id]);
+  }
+
+  function search() {
+    if ($_SERVER['REQUEST_METHOD'] === "POST") {
+      // sanitize
+      $searchInput = $this->sanitizeInput($_POST['search']);
+      // $searchInput = $this->checkEmpty(['search' => $searchInput]);
+
+      // turn user input to lower case
+      $searchInput = strtolower($searchInput);
+
+      // search on the database title column
+      $searchedResults =  $this->blog->searchBlog($searchInput);
+
+      // add author name to the blog posts
+      $searchedResults = $this->appendAuthorToBlog($searchedResults);
+
+      header("Location: /viewallposts");
+      $this->view->render("viewallposts", ["blogs" => $searchedResults]);
+    }
+  }
+
+  function sort() {
+    if ($_SERVER['REQUEST_METHOD'] === "POST") {
+      $sortInput = $this->sanitizeInput($_POST["sort"]);
+
+      // sort based on user input [asc, desc]
+      $sortResult = $this->blog->sortBy($sortInput);
+
+      // add author object to the blog 
+      $sortResult = $this->appendAuthorToBlog($sortResult);
+
+      $this->view->render("viewallposts", ["blogs" => $sortResult]);
+    }
   }
 
   public function show($id) {

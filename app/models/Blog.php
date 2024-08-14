@@ -12,6 +12,22 @@ class Blog {
     $this->db = new Model();
   }
 
+  function searchBlog($blogTitle) {
+    $data = [
+      "title" => "%" . $blogTitle . "%",
+    ];
+
+    return $this->db->query("SELECT * FROM blogs WHERE title LIKE :title", $data, 'all');
+  }
+
+  function sortBy($inputSort) {
+    if ($inputSort === "asc") {
+      return $this->db->sort_asc();
+    } else {
+      return $this->db->sort_desc();
+    }
+  }
+
   public function getAllBlogs() {
     return $this->db->query("SELECT * from blogs", [], 'all');
   }
@@ -104,12 +120,12 @@ class Blog {
     $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
   }
 
-  function findCategory($id) {
+  // function findCategory($id) {
 
-    $data = [
-      'searchValue' => $id[0]
-    ];
+  //   $data = [
+  //     'searchValue' => $id[0]
+  //   ];
 
-    return $this->db->query("SELECT * FROM blogs WHERE FIND_IN_SET(:searchValue, category) > 0", $data, "all");
-  }
+  //   return $this->db->query("SELECT * FROM blogs WHERE FIND_IN_SET(:searchValue, category) > 0", $data, "all");
+  // }
 }

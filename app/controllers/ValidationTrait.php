@@ -31,7 +31,7 @@ trait ValidationTrait {
                 return false;
             }
         }
-        return true;
+        return $fields;
     }
 
     public function validateRequiredFields(array $input, array $requiredFields): bool {
