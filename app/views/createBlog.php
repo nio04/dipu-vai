@@ -30,13 +30,9 @@
   <div class="mb-6">
     <label for="category" class="block text-lg font-medium text-gray-700">Category:</label>
     <select id="category" name="category" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500">
-      <option value="text_blog">Text Blog</option>
-      <option value="novel">Novel</option>
-      <option value="text book">Text Book</option>
-      <option value="picture story">Picture Story</option>
-      <option value="image blog">Image Blog</option>
-      <option value="video blog">Video Blog</option>
-      <option value="audio blog">Audio Blog</option>
+      <?php foreach ($categories as $category): ?>
+        <option value="<?= $category->category_title ?>"><?= $category->category_title ?></option>
+      <?php endforeach; ?>
     </select>
   </div>
 

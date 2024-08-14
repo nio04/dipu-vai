@@ -63,11 +63,10 @@ class BlogController extends Controller {
 
   // for catgory
   function category($id) {
+    // get category data from the DB
+    $categories = $this->blog->getCategoryTitle();
 
-    // query to find(search) category data on the database [multiple blogs]
-    // $blogs = $this->blog->findCategory($id);
-
-    $this->view->render('dashboard', ['id' => $id]);
+    $this->view->render('dashboard', ['categories' => $categories]);
   }
 
   function search() {
@@ -236,7 +235,9 @@ class BlogController extends Controller {
   }
 
   public function create() {
-    $this->view->render('dashboard');
+    // get category data from the DB
+    $categories = $this->blog->getCategoryTitle();
+    $this->view->render('dashboard', ['categories' => $categories]);
   }
 
   public function edit($id) {
@@ -267,7 +268,6 @@ class BlogController extends Controller {
     $title = $this->sanitizeInput($_POST['title']);
     $description = $this->sanitizeInput($_POST['description']);
     $tags = $this->sanitizeInput($_POST['tags']);
-    $category = implode(",", $_POST['category']); //later we sanitize it
 
     if (empty($title) || empty($description) || empty($tags)) {
       $errors['field_require'] = 'all the filelds must be filled';
@@ -279,7 +279,7 @@ class BlogController extends Controller {
       $_SESSION['blog_create_err'] = $errors;
     } else {
       $data =
-        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), 'category' => $category];
+        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp()];
 
       $blog = new Model();
       $blog->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category) VALUES (:user_id, :title, :description, :tags, :created_at, :category)", $data);

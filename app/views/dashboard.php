@@ -114,6 +114,14 @@
       </div>
     <?php endif ?>
 
+    <?php
+
+    echo ("<pre>");
+    // var_dump($categories);
+    echo ("</pre>");
+
+    ?>
+
 
     <!-- load view all posts -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>
@@ -122,12 +130,12 @@
 
     <!-- load create post -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs/create'): ?>
-      <?php loadView('createBlog') ?>
+      <?php loadView('createBlog', ['categories' => $categories]) ?>
     <?php endif; ?>
 
     <!-- load category view -->
     <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category"): ?>
-      <?php loadView("category") ?>
+      <?php loadView("category", ['categories' => $categories]) ?>
     <?php endif ?>
 
 

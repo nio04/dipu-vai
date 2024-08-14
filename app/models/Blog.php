@@ -113,19 +113,10 @@ class Blog {
       "tags" => $_POST["tags"],
     ];
 
-    echo ("<pre>");
-    var_dump($data);
-    echo ("</pre>");
-
     $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
   }
 
-  // function findCategory($id) {
-
-  //   $data = [
-  //     'searchValue' => $id[0]
-  //   ];
-
-  //   return $this->db->query("SELECT * FROM blogs WHERE FIND_IN_SET(:searchValue, category) > 0", $data, "all");
-  // }
+  function getCategoryTitle() {
+    return $this->db->query("SELECT * FROM category", [], "all");
+  }
 }
