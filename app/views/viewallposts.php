@@ -42,6 +42,7 @@
         </svg>
       </button>
       <ul class="dropdown-menu absolute hidden text-gray-700 pt-1 bg-white rounded shadow-lg w-48 z-10 transition-all">
+        <li class=""><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">General</a></li>
         <li class=""><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Howto</a></li>
         <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Guide</a></li>
         <li class=""><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">DIY</a></li>

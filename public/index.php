@@ -32,10 +32,13 @@ $router->addRoute("/blogs/like", BlogController::class); // like blog post
 $router->addRoute("/blogs/createComment", BlogController::class); // create commnet
 $router->addRoute("/blogs/create", BlogController::class);
 $router->addRoute("/blogs/edit", BlogController::class);
-$router->addRoute("/blogs/submit", BlogController::class);
+$router->addRoute("/blogs/submit", BlogController::class);  // submit blog
 $router->addRoute("/blogs/update", BlogController::class);
 $router->addRoute("/blogs/delete", BlogController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
+// ALL THE BLOG POST CATEGORY
+$router->addRoute("/blogs/category/general", BlogController::class);
+
 
 $uri = $_SERVER["REQUEST_URI"];
 $router->dispatch($uri);

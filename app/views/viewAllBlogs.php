@@ -1,24 +1,39 @@
 <div class="space-y-8 p-6">
-  <?php if (isset($blogs)) : ?>
-    <?php foreach ($blogs as $blog): ?>
-      <div class="bg-white shadow-md rounded-lg p-6 flex justify-between items-center">
-
-        <!-- Left Side: Title and Description -->
-        <div class="w-9/12">
-          <h4 class="text-xl font-semibold mb-2 text-gray-800"><?= $blog->title ?></h4>
-          <p class="text-gray-600 mb-4"><?= $blog->description ?></p>
-        </div>
-
-        <!-- Right Side: Action Buttons -->
-        <div class="space-x-4">
-          <a href="/blogs/show/<?= $blog->id ?>" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">View</a>
-          <a href="/blogs/edit/<?= $blog->id ?>" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Edit</a>
-          <form action="/blogs/delete/<?= $blog->id ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog post?');" class="inline-block">
-            <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</button>
-          </form>
-        </div>
-
+  <?php if (isset($blogs) && count($blogs) > 0): ?>
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <!-- Table Header -->
+      <div class="grid grid-cols-12 gap-4 mb-4">
+        <div class="col-span-5 font-bold text-gray-800">Title</div>
+        <div class="col-span-2 font-bold text-gray-800">Image</div>
+        <div class="col-start-10 col-end-13 font-bold text-gray-800">Actions</div>
       </div>
-    <?php endforeach; ?>
+
+      <!-- Table Rows -->
+      <?php foreach ($blogs as $blog): ?>
+        <div class="grid grid-cols-12 gap-4 items-center py-4 border-t border-gray-200 h-60">
+          <!-- Title Column -->
+          <div class="col-span-5">
+            <h4 class="text-lg font-semibold text-gray-600"><?= htmlspecialchars($blog->title) ?></h4>
+            <!-- <p class="text-gray-600"><?= htmlspecialchars($blog->description) ?></p> -->
+          </div>
+
+          <!-- Image Column -->
+          <div class="col-start-6 col-end-8 h-2/6">
+            <img src="<?= htmlspecialchars($blog->image) ?>" alt="<?= htmlspecialchars($blog->title) ?>" class="w-full h-auto rounded h-full">
+          </div>
+
+          <!-- Actions Column -->
+          <div class="col-start-10 col-end-13 space-x-4 ml-auto">
+            <a href="/blogs/show/<?= $blog->id ?>" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">View</a>
+            <a href="/blogs/edit/<?= $blog->id ?>" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Edit</a>
+            <form action="/blogs/delete/<?= $blog->id ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this blog post?');" class="inline-block">
+              <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</button>
+            </form>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    <p class="text-gray-600">No blogs found.</p>
   <?php endif; ?>
 </div>

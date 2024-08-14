@@ -5,6 +5,8 @@
     <?php unset($_SESSION['blog_create_err']) ?>
   </div>
 <?php endif; ?>
+
+
 <form action="/blogs/submit" method="POST" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-2 max-w-6xl mx-auto">
   <input type="hidden" name="id">
 
