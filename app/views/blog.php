@@ -3,7 +3,7 @@
 $tags = $blog->tags;
 $tags = explode(",", $tags);
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === true) {
   $goBackTo = '/viewallposts';
 } else {
   $goBackTo = '/';

@@ -42,7 +42,3 @@ $router->addRoute("/blogs/category/general", BlogController::class);
 
 $uri = $_SERVER["REQUEST_URI"];
 $router->dispatch($uri);
-
-// echo ("<pre>");
-// var_dump($_SESSION);
-// echo ("</pre>");

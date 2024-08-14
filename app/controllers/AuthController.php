@@ -23,9 +23,9 @@ class AuthController extends Controller {
       $isAdmin = $additionlToken === "1234" ? true : false;
 
       if ($isAdmin) {
-        $_SESSION['admin'] = true;
+        $_SESSION['settings']['admin'] = true;
       } else {
-        $_SESSION['admin'] = false;
+        $_SESSION['settings']['admin'] = false;
       }
 
       $empty = $this->checkEmpty([$username, $password]);
@@ -40,7 +40,7 @@ class AuthController extends Controller {
 
       if ($user && $empty && $isAdmin) {
         $_SESSION['user'] = $user;
-        $_SESSION['admin'] = true;
+        $_SESSION['settings']['admin'] = true;
         // Redirect to home or dashboard
         header('Location: /dashboard');
         exit;
@@ -49,7 +49,7 @@ class AuthController extends Controller {
         exit;
       } else if ($user && $empty && !$isAdmin) {
         $_SESSION['user'] = $user;
-        $_SESSION['admin'] = false;
+        $_SESSION['settings']['admin'] = false;
         // redirect the non admin to [not dashboard] page
         header("Location: /viewallposts");
       } else {
@@ -114,7 +114,7 @@ class AuthController extends Controller {
 
   function logout() {
     unset($_SESSION['user']);
-    unset($_SESSION['admin']);
+    unset($_SESSION['settings']['admin']);
     header('Location:/');
   }
 }
