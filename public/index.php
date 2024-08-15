@@ -39,6 +39,7 @@ $router->addRoute("/blogs/update", BlogController::class);
 $router->addRoute("/blogs/delete", BlogController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
 $router->addRoute("/blogs/category", BlogController::class);
+$router->addRoute("/blogs/submitCategory", BlogController::class);
 
 
 $uri = $_SERVER["REQUEST_URI"];

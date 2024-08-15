@@ -71,11 +71,22 @@
       <!-- Dashboard Title -->
       <h1 class="text-2xl font-semibold mr-auto">Welcome to your Dashboard!</h1>
       <div class="flex items-center space-x-4">
+        <!-- create new post -->
         <?php
         // Check if the user is logged in and the URI is '/blogs'
         if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs' || $_SERVER['REQUEST_URI'] === '/dashboard') {
           echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
                     Create New Post
+                  </a>';
+        }
+        ?>
+
+        <!-- create new category -->
+        <?php
+        // Check if the user is logged in and the URI is '/blogs'
+        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs/category') {
+          echo '<a href="/blogs/createCategory" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
+                    Create New Category
                   </a>';
         }
         ?>
@@ -96,31 +107,29 @@
           <!-- View All Posts Card -->
           <a href="/blogs" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
             <h2 class="text-2xl font-semibold mb-2">View All Posts</h2>
-            <p class="text-lg">See a list of all your blog posts.</p>
+            <p class="text-lg mt-6">See a list of all your blog posts.</p>
           </a>
 
           <!-- Create New Blog Post Card -->
           <a href="/blogs/create" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
             <h2 class="text-2xl font-semibold mb-2">Create New Blog Post</h2>
-            <p class="text-lg">Write and publish a new blog post.</p>
+            <p class="text-lg mt-6">Write and publish a new blog post.</p>
           </a>
 
           <!-- View All Blog Posts as User Card -->
           <a href="/viewallposts" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
             <h2 class="text-2xl font-semibold mb-2">View All Blog Posts as User</h2>
-            <p class="text-lg">Browse blog posts as a regular user.</p>
+            <p class="text-lg mt-6">Browse blog posts as a regular user.</p>
+          </a>
+
+          <!-- View All Blog Posts as User Card -->
+          <a href="/blogs/category" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+            <h2 class="text-2xl font-semibold mb-2">View All The Category</h2>
+            <p class="text-lg mt-6">Browse All the categoies and manage them.</p>
           </a>
         </div>
       </div>
     <?php endif ?>
-
-    <?php
-
-    echo ("<pre>");
-    // var_dump($categories);
-    echo ("</pre>");
-
-    ?>
 
 
     <!-- load view all posts -->
@@ -132,6 +141,13 @@
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs/create'): ?>
       <?php loadView('createBlog', ['categories' => $categories]) ?>
     <?php endif; ?>
+
+
+    <!-- load creating category view -->
+    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/createCategory"): ?>
+      <?php loadView("createCategory", $errors ?? []) ?>
+      <!-- <?php loadView("createCategory", ['category_empty_error' => "category field can not be empty", 'category_exist_error' => "xxx"]) ?> -->
+    <?php endif ?>
 
     <!-- load category view -->
     <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category"): ?>

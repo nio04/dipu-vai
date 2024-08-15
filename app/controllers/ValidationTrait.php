@@ -28,7 +28,7 @@ trait ValidationTrait {
     public function checkEmpty($fields) {
         foreach ($fields as $field) {
             if (empty($field)) {
-                return false;
+                return [];
             }
         }
         return $fields;

@@ -97,6 +97,24 @@ class Blog {
     return $this->db->query("INSERT INTO comments (user_id, blog_id, comment) VALUES (:user_id, :blog_id, :comment)", $data);
   }
 
+  function insertBlogData($data) {
+    return $this->db->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category) VALUES (:user_id, :title, :description, :tags, :created_at, :category)", $data);
+  }
+
+  function insertCategory($title) {
+    $data = [
+      "category_title" => $title,
+    ];
+    return $this->db->query("INSERT INTO category (category_title) VALUES (:category_title)", $data);
+  }
+
+  function checkExistCategory($title) {
+    $data = [
+      "category_title" => $title,
+    ];
+    return $this->db->query("SELECT * FROM category WHERE category_title = :category_title", $data, 'single');
+  }
+
   function deleteTheBlog($id) {
     $data = [
       'id' => $id

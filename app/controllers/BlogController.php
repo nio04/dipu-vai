@@ -240,6 +240,11 @@ class BlogController extends Controller {
     $this->view->render('dashboard', ['categories' => $categories]);
   }
 
+  function createCategory() {
+
+    $this->view->render("dashboard");
+  }
+
   public function edit($id) {
     // fetch data from the database by id   
     $post = $this->blog->getTheBlog($id);
@@ -268,6 +273,7 @@ class BlogController extends Controller {
     $title = $this->sanitizeInput($_POST['title']);
     $description = $this->sanitizeInput($_POST['description']);
     $tags = $this->sanitizeInput($_POST['tags']);
+    $category = $this->sanitizeInput($_POST['category']);
 
     if (empty($title) || empty($description) || empty($tags)) {
       $errors['field_require'] = 'all the filelds must be filled';
@@ -278,14 +284,75 @@ class BlogController extends Controller {
       header('Location: /blogs/create');
       $_SESSION['blog_create_err'] = $errors;
     } else {
+      // no error generated
       $data =
-        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp()];
+        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category];
 
-      $blog = new Model();
-      $blog->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category) VALUES (:user_id, :title, :description, :tags, :created_at, :category)", $data);
+      // insert & success result store
+      $this->blog->insertBlogData($data);
 
       header('Location: /blogs');
       unset($_SESSION['blog_create_err']);
+    }
+  }
+
+  function submitCategory() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $errors = [];
+
+      // sanitize
+      $categoryTitle = $this->sanitizeInput($_POST['title']);
+      // check if field empty
+      $categoryTitle = $this->checkEmpty([$categoryTitle]);
+
+      // set empty field error
+      if (count($categoryTitle) < 1) {
+        $errors['category_empty_error'] = 'category field can not be empty';
+      }
+
+      // check if current category exist already
+      $ifExistCategory = $this->blog->checkExistCategory(implode($categoryTitle));
+      if ($ifExistCategory) {
+        $errors['category_exist_error'] = 'current category already found. it can not be used again';
+      } else {
+        $this->blog->insertCategory(implode($categoryTitle));
+      }
+
+      if (empty($errors)) {
+        unset($_SESSION['errors']);
+        header('Location: /blogs/category');
+      } else {
+        $_SESSION['errors'] = $errors;
+        header("Location:/blogs/createCategory");
+        $this->view->render("dashboard");
+      }
+
+
+
+      // if (count($categoryTitle) > 0) {
+      //   // check if the current category input existon database
+      //   // if it doesnot exist, insert 
+      //   $ifExistCategory = $this->blog->checkExistCategory(implode($categoryTitle));
+
+      //   if ($ifExistCategory) {
+      //     // set error message saying: category exist
+      //     // header("Location:/blogs/createCategory");
+      //     $errors['category_exist_error'] = "current category already found. it can not be used again";
+      //     $this->view->render("dashboard", $errors);
+      //   } else {
+      //     $this->blog->insertCategory(implode($categoryTitle));
+      //     // header("Location:/blogs/category");
+      //     $this->view->render("dashboard", $errors);
+      //   }
+      // } else {
+      //   $errors["category_empty_error"] = "category field can not be empty";
+      //   // header("Location: /blogs/createCategory");
+      //   $this->view->render("dashboard", $errors);
+      // }
+
+      // echo ("<pre>");
+      // var_dump($errors);
+      // echo ("</pre>");
     }
   }
 }
