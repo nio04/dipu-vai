@@ -5,16 +5,18 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Traits\ValidationTrait;
 use Core\Controller;
-use Core\Model;
 use App\Models\Blog;
+use App\Controllers\CategoryController;
 
 class BlogController extends Controller {
   use ValidationTrait;
 
   public $blog;
+  public $category;
 
   public function __construct() {
     $this->blog = new Blog();
+    $this->category = new CategoryController();
     parent::__construct();
   }
 
@@ -22,6 +24,11 @@ class BlogController extends Controller {
   public function showAllBlogs() {
     $allBlogs = $this->blog->getAllBlogs();
     $this->view->render('dashboard', ['blogs' => $allBlogs]);
+  }
+
+  function create() {
+    $categories = $this->category->loadCategories();
+    $this->view->render('dashboard', ['categories' => $categories]);
   }
 
   // helper class: add author object [name & id] to the blogs 
@@ -226,13 +233,6 @@ class BlogController extends Controller {
     return $this->blog->getLikeCountForTheBlog($id);
   }
 
-  public function create() {
-    // get category data from the DB
-    $categories = $this->blog->getCategoryTitle();
-    $this->view->render('dashboard', ['categories' => $categories]);
-  }
-
-
   public function edit($id) {
     // fetch data from the database by id   
     $post = $this->blog->getTheBlog($id);
@@ -252,7 +252,7 @@ class BlogController extends Controller {
 
   public function submit() {
     $this->submitBlog();
-    $this->view->render('dashboard');
+    // $this->view->render('dashboard');
   }
 
   public function submitBlog() {
@@ -262,9 +262,38 @@ class BlogController extends Controller {
     $description = $this->sanitizeInput($_POST['description']);
     $tags = $this->sanitizeInput($_POST['tags']);
     $category = $this->sanitizeInput($_POST['category']);
+    $cover_image = $_FILES['cover_image'];
+    /**
+     * @var bool 
+     * true: means image file processing error
+     * false: means image file processing NOT error 
+     */
+    $image_error = true;
 
-    if (empty($title) || empty($description) || empty($tags)) {
-      $errors['field_require'] = 'all the filelds must be filled';
+    // sanitize file name
+    $fileName = basename($cover_image['name']);
+
+    $targetDir = basePath('uploads/blogs/cover_images/');
+    $targetFile = $targetDir . $fileName;
+
+    echo ("<pre>");
+    var_dump($targetFile);
+    echo ("</pre>");
+
+    // check type extension
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+    $allowedType = ['jpg', 'jpeg', 'png', 'gif'];
+
+    if (in_array($fileType, $allowedType)) {
+      // move file to the target directory
+      if (move_uploaded_file($cover_image['tmp_name'], $targetFile)) {
+        // insert to DB
+        $image_error = false;
+      }
+    }
+
+    if (empty($title) || empty($description) || empty($tags) || $image_error === true) {
+      $errors['field_require'] = 'all the filelds must be filled or something else wrong';
     }
 
     // if error exist redirect to create-blog route again with error
@@ -274,7 +303,7 @@ class BlogController extends Controller {
     } else {
       // no error generated
       $data =
-        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category];
+        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category, 'image' => $fileName];
 
       // insert & success result store
       $this->blog->insertBlogData($data);

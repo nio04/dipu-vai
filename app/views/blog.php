@@ -4,7 +4,7 @@ $tags = $blog->tags;
 $tags = explode(",", $tags);
 
 if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === true) {
-  $goBackTo = '/viewallposts';
+  $goBackTo = '/blogs';
 } else {
   $goBackTo = '/';
 }
@@ -31,7 +31,7 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
 
     <!-- cover image -->
     <div class="object-cover h-80 my-12 ">
-      <img class="h-full w-full rounded-md" src="<?= $blog->image ?>" alt="<?= $blog->title ?>">
+      <img class="h-full w-full rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
     </div>
 
     <!-- Blog Title -->

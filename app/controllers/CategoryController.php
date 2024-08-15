@@ -19,9 +19,13 @@ class CategoryController extends Controller {
   }
 
   function index() {
-    // get all the category titles
-    $categories = $this->blog->getCategoryTitles();
+    $categories =  $this->loadCategories();
     $this->view->render('dashboard', ['categories' => $categories]);
+  }
+
+  function loadCategories() {
+    // get all the category titles
+    return $this->blog->getCategoryTitles();
   }
 
   function createCategory() {

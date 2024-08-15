@@ -4,8 +4,7 @@
     <?php unset($_SESSION['blog_create_err']) ?>
   </div>
 <?php endif; ?>
-
-<form action="/blogs/submit" method="POST" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-2 max-w-6xl mx-auto">
+<form action="/blogs/submit" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-2 max-w-6xl mx-auto">
   <input type="hidden" name="id">
 
   <!-- Title Field -->
@@ -34,6 +33,14 @@
         <option value="<?= $category->id ?>"><?= $category->category_title ?></option>
       <?php endforeach; ?>
     </select>
+  </div>
+
+  <!-- File Upload Field -->
+  <div class="mb-6">
+    <label for="cover_image" class="block text-lg font-medium text-gray-700">Cover Image:</label>
+    <div class="mt-2 flex items-center">
+      <input type="file" id="cover_image" name="cover_image" class="block w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
+    </div>
   </div>
 
   <!-- Submit Button -->

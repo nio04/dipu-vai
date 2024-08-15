@@ -4,6 +4,10 @@ function basePath($path) {
   return __DIR__ . '/public/' . $path;
 }
 
+function loadImagePath($path) {
+  return "uploads/blogs/" . $path;
+}
+
 function loadView($view, $data = []) {
   extract($data);
   require_once __DIR__ . "/app/views/" . $view . ".php";

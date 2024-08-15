@@ -98,7 +98,7 @@ class Blog {
   }
 
   function insertBlogData($data) {
-    return $this->db->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category) VALUES (:user_id, :title, :description, :tags, :created_at, :category)", $data);
+    return $this->db->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category, image) VALUES (:user_id, :title, :description, :tags, :created_at, :category, :image)", $data);
   }
 
   function getCategoryDetail($id) {
