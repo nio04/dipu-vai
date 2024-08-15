@@ -9,6 +9,7 @@ use Core\Router;
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
 use App\Controllers\BlogController;
+use App\Controllers\CategoryController;
 use App\Controllers\DashboardController;
 
 // unset($_SESSION);
@@ -38,8 +39,8 @@ $router->addRoute("/blogs/submit", BlogController::class);  // submit blog
 $router->addRoute("/blogs/update", BlogController::class);
 $router->addRoute("/blogs/delete", BlogController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
-$router->addRoute("/blogs/category", BlogController::class);
-$router->addRoute("/blogs/submitCategory", BlogController::class);
+$router->addRoute("/category", CategoryController::class);
+$router->addRoute("category/submitCategory", CategoryController::class);
 
 
 $uri = $_SERVER["REQUEST_URI"];

@@ -42,7 +42,7 @@
 
         <!-- category link -->
         <li>
-          <a href="/blogs/category" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 underline underline-offset-8">
+          <a href="/category" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 underline underline-offset-8">
             Categories
           </a>
         </li>
@@ -84,8 +84,8 @@
         <!-- create new category -->
         <?php
         // Check if the user is logged in and the URI is '/blogs'
-        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs/category') {
-          echo '<a href="/blogs/createCategory" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
+        if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/category') {
+          echo '<a href="/category/createCategory" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
                     Create New Category
                   </a>';
         }
@@ -123,7 +123,7 @@
           </a>
 
           <!-- View All Blog Posts as User Card -->
-          <a href="/blogs/category" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+          <a href="/category" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
             <h2 class="text-2xl font-semibold mb-2">View All The Category</h2>
             <p class="text-lg mt-6">Browse All the categoies and manage them.</p>
           </a>
@@ -142,18 +142,20 @@
       <?php loadView('createBlog', ['categories' => $categories]) ?>
     <?php endif; ?>
 
-
     <!-- load creating category view -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/createCategory"): ?>
+    <?php if ($_SERVER['REQUEST_URI'] === "/category/createCategory"): ?>
       <?php loadView("createCategory", $errors ?? []) ?>
-      <!-- <?php loadView("createCategory", ['category_empty_error' => "category field can not be empty", 'category_exist_error' => "xxx"]) ?> -->
     <?php endif ?>
 
     <!-- load category view -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/blogs/category"): ?>
+    <?php if ($_SERVER['REQUEST_URI'] === "/category"): ?>
       <?php loadView("category", ['categories' => $categories]) ?>
     <?php endif ?>
 
+    <!-- load category editor with id loaded but we ignore it by regex -->
+    <?php if (preg_match('/[a-z]+\/[a-z]+\//i', trim($_SERVER['REQUEST_URI'], "/"))): ?>
+      <?php loadView("createCategory", ['category' => $category]) ?>
+    <?php endif;  ?>
 
   </main>
 

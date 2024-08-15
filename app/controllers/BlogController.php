@@ -61,14 +61,6 @@ class BlogController extends Controller {
     $this->view->render('viewallposts', ['blogs' => $allBlogs]);
   }
 
-  // for catgory
-  function category($id) {
-    // get category data from the DB
-    $categories = $this->blog->getCategoryTitle();
-
-    $this->view->render('dashboard', ['categories' => $categories]);
-  }
-
   function search() {
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
       // sanitize
@@ -240,10 +232,6 @@ class BlogController extends Controller {
     $this->view->render('dashboard', ['categories' => $categories]);
   }
 
-  function createCategory() {
-
-    $this->view->render("dashboard");
-  }
 
   public function edit($id) {
     // fetch data from the database by id   
@@ -293,66 +281,6 @@ class BlogController extends Controller {
 
       header('Location: /blogs');
       unset($_SESSION['blog_create_err']);
-    }
-  }
-
-  function submitCategory() {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $errors = [];
-
-      // sanitize
-      $categoryTitle = $this->sanitizeInput($_POST['title']);
-      // check if field empty
-      $categoryTitle = $this->checkEmpty([$categoryTitle]);
-
-      // set empty field error
-      if (count($categoryTitle) < 1) {
-        $errors['category_empty_error'] = 'category field can not be empty';
-      }
-
-      // check if current category exist already
-      $ifExistCategory = $this->blog->checkExistCategory(implode($categoryTitle));
-      if ($ifExistCategory) {
-        $errors['category_exist_error'] = 'current category already found. it can not be used again';
-      } else {
-        $this->blog->insertCategory(implode($categoryTitle));
-      }
-
-      if (empty($errors)) {
-        unset($_SESSION['errors']);
-        header('Location: /blogs/category');
-      } else {
-        $_SESSION['errors'] = $errors;
-        header("Location:/blogs/createCategory");
-        $this->view->render("dashboard");
-      }
-
-
-
-      // if (count($categoryTitle) > 0) {
-      //   // check if the current category input existon database
-      //   // if it doesnot exist, insert 
-      //   $ifExistCategory = $this->blog->checkExistCategory(implode($categoryTitle));
-
-      //   if ($ifExistCategory) {
-      //     // set error message saying: category exist
-      //     // header("Location:/blogs/createCategory");
-      //     $errors['category_exist_error'] = "current category already found. it can not be used again";
-      //     $this->view->render("dashboard", $errors);
-      //   } else {
-      //     $this->blog->insertCategory(implode($categoryTitle));
-      //     // header("Location:/blogs/category");
-      //     $this->view->render("dashboard", $errors);
-      //   }
-      // } else {
-      //   $errors["category_empty_error"] = "category field can not be empty";
-      //   // header("Location: /blogs/createCategory");
-      //   $this->view->render("dashboard", $errors);
-      // }
-
-      // echo ("<pre>");
-      // var_dump($errors);
-      // echo ("</pre>");
     }
   }
 }
