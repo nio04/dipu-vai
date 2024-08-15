@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BlogController;
+use App\Models\Category;
 use App\Traits\ValidationTrait;
 use Core\Controller;
 use App\Models\Blog;
@@ -11,10 +11,12 @@ use App\Models\Blog;
 class CategoryController extends Controller {
   use ValidationTrait;
 
-  public $blog;
+  private $blog;
+  private $category;
 
   public function __construct() {
     $this->blog = new Blog();
+    $this->category = new Category();
     parent::__construct();
   }
 
@@ -25,7 +27,7 @@ class CategoryController extends Controller {
 
   function loadCategories() {
     // get all the category titles
-    return $this->blog->getCategoryTitles();
+    return $this->category->getCategoryTitles();
   }
 
   function createCategory() {
@@ -34,13 +36,13 @@ class CategoryController extends Controller {
 
   function edit($id) {
     // get data from DB with ID
-    $categoryDetail = $this->blog->getCategoryDetail($id);
+    $categoryDetail = $this->category->getCategoryDetail($id);
 
     $this->view->render("dashboard", ["category" => $categoryDetail]);
   }
 
   function delete($id) {
-    $this->blog->deleteCategory($id);
+    $this->category->deleteCategory($id);
     header("Location: /category");
   }
 
@@ -59,11 +61,11 @@ class CategoryController extends Controller {
       }
 
       // check if current category exist already
-      $ifExistCategory = $this->blog->checkExistCategory(implode($categoryTitle));
+      $ifExistCategory = $this->category->checkExistCategory(implode($categoryTitle));
       if ($ifExistCategory) {
         $errors['category_exist_error'] = 'current category already found. it can not be used again';
       } else {
-        $this->blog->insertCategory(implode($categoryTitle));
+        $this->category->insertCategory(implode($categoryTitle));
       }
 
       if (empty($errors)) {

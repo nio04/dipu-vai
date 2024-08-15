@@ -101,44 +101,6 @@ class Blog {
     return $this->db->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category, image) VALUES (:user_id, :title, :description, :tags, :created_at, :category, :image)", $data);
   }
 
-  function getCategoryDetail($id) {
-    $data = [
-      'id' => (int) $id
-    ];
-
-    return $this->db->query("SELECT * FROM category where id = :id", $data, 'single');
-  }
-
-  function insertCategory($title) {
-    $data = [
-      "category_title" => $title,
-    ];
-    return $this->db->query("INSERT INTO category (category_title) VALUES (:category_title)", $data);
-  }
-
-
-  function editCategory($id) {
-    $data = [
-      "id" => $id
-    ];
-
-    // return $this->db->query("", $data);
-  }
-
-  function deleteCategory($id) {
-    $data = [
-      "id" => $id
-    ];
-    return $this->db->query("DELETE FROM category WHERE id = :id", $data);
-  }
-
-  function checkExistCategory($title) {
-    $data = [
-      "category_title" => $title,
-    ];
-    return $this->db->query("SELECT * FROM category WHERE category_title = :category_title", $data, 'single');
-  }
-
   function deleteTheBlog($id) {
     $data = [
       'id' => $id
@@ -156,9 +118,5 @@ class Blog {
     ];
 
     $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
-  }
-
-  function getCategoryTitles() {
-    return $this->db->query("SELECT * FROM category", [], "all");
   }
 }
