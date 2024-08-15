@@ -88,18 +88,21 @@ class BlogController extends Controller {
     }
   }
 
-  function sort() {
-    if ($_SERVER['REQUEST_METHOD'] === "POST") {
-      $sortInput = $this->sanitizeInput($_POST["sort"]);
+  function sort($id) {
 
-      // sort based on user input [asc, desc]
-      $sortResult = $this->blog->sortBy($sortInput);
+    $sortInput = $this->sanitizeInput($id[0]);
 
-      // add author object to the blog 
-      $sortResult = $this->appendAuthorToBlog($sortResult);
+    // save the sorting option in settings session
+    $_SESSION['settings']['sortBy'] = $sortInput;
 
-      $this->view->render("viewallposts", ["blogs" => $sortResult]);
-    }
+    // sort based on user input [asc, desc]
+    $sortResult = $this->blog->sortBy($sortInput);
+
+    // add author object to the blog 
+    $sortResult = $this->appendAuthorToBlog($sortResult);
+
+    // cleanup uri
+    $this->view->render("viewallposts", ["blogs" => $sortResult]);
   }
 
   public function show($id) {

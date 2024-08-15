@@ -12,14 +12,6 @@ use App\Controllers\BlogController;
 use App\Controllers\CategoryController;
 use App\Controllers\DashboardController;
 
-// unset($_SESSION);
-// session_unset();
-
-
-// echo ("<pre>");
-// var_dump($_SESSION);
-// echo ("</pre>");
-
 $router = new Router();
 
 $router->addRoute("", HomeController::class);
@@ -42,6 +34,13 @@ $router->addRoute("/logout", AuthController::class, "logout");
 $router->addRoute("/category", CategoryController::class);
 $router->addRoute("category/submitCategory", CategoryController::class);
 
-
 $uri = $_SERVER["REQUEST_URI"];
 $router->dispatch($uri);
+
+
+// unset($_SESSION);
+// session_unset();
+
+// echo ("<pre>");
+// var_dump($_SESSION);
+// echo ("</pre>");
