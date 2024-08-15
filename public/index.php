@@ -29,7 +29,7 @@ $router->addRoute("/viewallposts", BlogController::class, "viewallposts"); // fo
 $router->addRoute("/blogs/search", BlogController::class);
 $router->addRoute("/blogs/sort", BlogController::class);
 $router->addRoute("/dashboard", DashboardController::class);
-$router->addRoute("/blogs", BlogController::class, "showAllBlogs"); // for admin
+$router->addRoute("/blogs", BlogController::class, "viewAllBlogsAsAdmin"); // for admin
 $router->addRoute("/blogs/show", BlogController::class); // single blog post
 $router->addRoute("/blogs/like", BlogController::class); // like blog post
 $router->addRoute("/blogs/createComment", BlogController::class); // create commnet

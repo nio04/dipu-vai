@@ -134,7 +134,7 @@
 
     <!-- load view all posts -->
     <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>
-      <?php loadView('viewAllBlogs', ['blogs' => $blogs]) ?>
+      <?php loadView('blogs', ['blogs' => $blogs]) ?>
     <?php endif; ?>
 
     <!-- load create post -->

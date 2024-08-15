@@ -1,3 +1,5 @@
+<!-- admin view: all blog lists -->
+
 <div class="space-y-8 p-6">
   <?php if (isset($blogs) && count($blogs) > 0): ?>
     <div class="bg-white shadow-md rounded-lg p-6">
