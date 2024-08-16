@@ -30,9 +30,10 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
     </div>
 
     <!-- cover image -->
-    <div class="object-cover h-80 my-12 ">
-      <img class="h-full w-full rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
+    <div class="relative h-80 my-12">
+      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
     </div>
+
 
     <!-- Blog Title -->
     <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= $blog->title ?></h1>

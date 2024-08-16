@@ -124,7 +124,7 @@
         <!-- Blog Card Start -->
         <div class="bg-blue-white rounded-lg shadow-md overflow-hidden">
           <div class="relative h-40 w-full max-w-full object-cover">
-            <img src="<?= $blog->image ?>" alt="<?= $blog->title ?>" class="absolute top-0 left-0 w-full h-full object-cover">
+            <img src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>" class="absolute top-0 left-0 w-full h-full object-cover">
           </div>
           <div class="p-4 flex justify-between items-start">
             <a href="/blogs/show/<?= $blog->id ?>" class="text-lg font-bold text-gray-700 hover:underline"><?= $blog->title ?></a>
