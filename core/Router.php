@@ -12,10 +12,34 @@ class Router {
    * @param string|null $action the action method to be call
    * @return void
    */
-  public function addRoute($uri, $controllerClass, $action = 'index') {
+  public function addRoute($uri, $controllerClass = null, $defaultAction = 'index') {
+    $uri = trim($uri, "/");
+
+    // Explode the URI into segments
+    $segments = explode("/", $uri);
+
+    // Extract the controller class name from the first segment or use the provided controller class
+    $controllerClass = $controllerClass ?? $segments[0];
+
+    // Extract the action from the next segment or use the default action
+    $action = isset($segments[1]) ? $segments[1] : $defaultAction;
+
+    // Store the route information
+    $this->routes[$uri] = [
+      $controllerClass,
+      $action
+    ];
+  }
+
+
+
+  /*
+ public function addRoute($uri, $controllerClass, $action = 'index') {
     $uri = trim($uri, "/");
     $this->routes[$uri] = [$controllerClass, $action];
   }
+*/
+
 
   // dispatch the request based on the current uri
   public function dispatch($uri) {
@@ -56,7 +80,7 @@ class Router {
           // if method_exists then execute the method from the controller wilth param
           call_user_func(array($controller, $action), $params);
         } else {
-          echo "action: $action was not found";
+          echo "action: $action was not found in calss: {$this->routes[$routeKey][0]}";
         }
       } else {
         echo "controller: $controllerClass was not found";

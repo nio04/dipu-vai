@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Core\Model;
 use PDO;
+use App\Traits\BlogTraits;
 
 class Blog {
   private $db;

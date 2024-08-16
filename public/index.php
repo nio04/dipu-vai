@@ -9,6 +9,8 @@ use Core\Router;
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
 use App\Controllers\BlogController;
+use App\Controllers\BlogActionController;
+use App\Controllers\BlogEditController;
 use App\Controllers\CategoryController;
 use App\Controllers\DashboardController;
 
@@ -18,22 +20,22 @@ $router->addRoute("", HomeController::class);
 $router->addRoute("/login", AuthController::class, "login");
 $router->addRoute("/register", AuthController::class, "register");
 $router->addRoute("/viewallposts", BlogController::class, "viewallposts"); // for non-admin
-$router->addRoute("/blogs/search", BlogController::class);
-$router->addRoute("/blogs/sort", BlogController::class);
+$router->addRoute("/blogs/search", BlogActionController::class);
+$router->addRoute("/blogs/sort", BlogActionController::class);
 $router->addRoute("/dashboard", DashboardController::class);
-$router->addRoute("/blogs", BlogController::class, "viewAllBlogsAsAdmin"); // for admin
 $router->addRoute("/blogs/show", BlogController::class); // single blog post
-$router->addRoute("/blogs/like", BlogController::class); // like blog post
-$router->addRoute("/blogs/createComment", BlogController::class); // create commnet
-$router->addRoute("/blogs/create", BlogController::class);
-$router->addRoute("/blogs/edit", BlogController::class);
-$router->addRoute("/blogs/submit", BlogController::class);  // submit blog
-$router->addRoute("/blogs/update", BlogController::class);
-$router->addRoute("/blogs/delete", BlogController::class);
+$router->addRoute("/blogs/like", BlogActionController::class); // like blog post
+$router->addRoute("/blogs/createComment", BlogActionController::class); // create commnet
+$router->addRoute("/blogs/create", BlogEditController::class);
+$router->addRoute("/blogs/edit", BlogEditController::class);
+$router->addRoute("/blogs/submit", BlogEditController::class);  // submit blog
+$router->addRoute("/blogs/update", BlogEditController::class);
+$router->addRoute("/blogs/delete", BlogEditController::class);
 $router->addRoute("/logout", AuthController::class, "logout");
 $router->addRoute("/category", CategoryController::class);
 $router->addRoute("category/submitCategory", CategoryController::class);
 
+$router->addRoute("/blogs", BlogController::class, "viewAllBlogsAsAdmin"); // for admin
 $uri = $_SERVER["REQUEST_URI"];
 $router->dispatch($uri);
 
