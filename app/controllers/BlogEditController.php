@@ -26,7 +26,7 @@ class BlogEditController extends Controller {
   }
 
 
-  public function edit($id) {
+  function edit($id) {
     // fetch data from the database by id   
     $post = $this->blog->getTheBlog($id);
     // load a new view and pass the fetched data
