@@ -60,6 +60,8 @@ class AuthController extends Controller {
         $_SESSION['settings']['admin'] = true;
         header('location: /dashboard');
       } else if ($user && !$isAdmin) {
+        $_SESSION['user'] = $user;
+        $_SESSION['settings']['admin'] = false;
         // redirect to view all posts
         return header("location: /viewallposts");
       } else {
