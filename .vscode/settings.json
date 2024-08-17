@@ -2,7 +2,7 @@
   "folder-color.pathColors": [
     {
       "folderPath": "test\\public\\index.php\\",
-      "color": "foldercolorizer.GreenYellow"
+      "color": "foldercolorizer.LightPink"
     },
     {
       "folderPath": "test\\core\\Router.php\\",

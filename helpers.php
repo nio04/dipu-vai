@@ -5,7 +5,7 @@ function basePath($path) {
 }
 
 function loadImagePath($path) {
-  return "uploads/blogs/" . $path;
+  return "/uploads/blogs/" . $path;
 }
 
 function loadView($view, $data = []) {

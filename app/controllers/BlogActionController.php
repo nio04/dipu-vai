@@ -116,6 +116,7 @@ class BlogActionController extends Controller {
       $searchInput = $this->sanitizeInput($_POST['search']);
       // $searchInput = $this->checkEmpty(['search' => $searchInput]);
 
+
       // turn user input to lower case
       $searchInput = strtolower($searchInput);
 
@@ -125,7 +126,7 @@ class BlogActionController extends Controller {
       // add author name to the blog posts
       $searchedResults = $this->appendAuthorToBlog($searchedResults);
 
-      header("Location: /viewallposts");
+      // header("Location: /viewallposts");
       $this->view->render("viewallposts", ["blogs" => $searchedResults]);
     }
   }
