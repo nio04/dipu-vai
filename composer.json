@@ -5,7 +5,7 @@
             "App\\Controllers\\": "app/controllers/",
             "App\\Models\\": "app/models/",
             "App\\Views\\": "app/views/",
-            "App\\Traits\\": "app/controllers/",
+            "App\\Traits\\": "app/Traits/",
             "Core\\": "core/"
         }
     },

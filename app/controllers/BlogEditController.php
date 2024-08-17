@@ -21,7 +21,7 @@ class BlogEditController extends Controller {
   }
 
   function create() {
-    $categories = $this->category->loadCategories();
+    $categories = $this->category->load();
     $this->view->render('dashboard', ['categories' => $categories]);
   }
 

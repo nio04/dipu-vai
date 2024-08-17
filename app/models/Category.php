@@ -17,9 +17,9 @@ class Category {
 
   function checkExistCategory($title) {
     $data = [
-      "category_title" => $title,
+      "title" => $title,
     ];
-    return $this->db->query("SELECT * FROM category WHERE category_title = :category_title", $data, 'single');
+    return $this->db->query("SELECT * FROM category WHERE title = :title", $data, 'single');
   }
 
   function getCategoryDetail($id) {
@@ -32,9 +32,18 @@ class Category {
 
   function insertCategory($title) {
     $data = [
-      "category_title" => $title,
+      "title" => $title,
     ];
-    return $this->db->query("INSERT INTO category (category_title) VALUES (:category_title)", $data);
+    return $this->db->query("INSERT INTO category (title) VALUES (:title)", $data);
+  }
+
+  function edit($id, $title) {
+    $data = [
+      'title' => $title,
+      'id' => (int) $id
+    ];
+
+    return $this->db->query("UPDATE category SET title = :title WHERE id = :id", $data);
   }
 
 

@@ -14,49 +14,49 @@ class AuthController extends Controller {
   }
 
   public function login() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      // Handle login form submission
-      $username = $this->sanitizeInput($_POST['username']);
-      $password = $this->sanitizeInput($_POST['password']);
-      $additionlToken = $this->sanitizeInput($_POST['additional_token']);
+    // Render login page
+    $this->view->render('login');
+  }
 
-      $isAdmin = $additionlToken === "1234" ? true : false;
+  function submit() {
+    // Handle login form submission
+    $username = $this->sanitizeInput($_POST['username']);
+    $password = $this->sanitizeInput($_POST['password']);
+    $additionlToken = $this->sanitizeInput($_POST['additional_token']);
+
+    $isAdmin = $additionlToken === "1234" ? true : false;
 
 
-      if ($isAdmin) {
-        $_SESSION['settings']['admin'] = true;
-      } else {
-        $_SESSION['settings']['admin'] = false;
-      }
+    if ($isAdmin) {
+      $_SESSION['settings']['admin'] = true;
+    } else {
+      $_SESSION['settings']['admin'] = false;
+    }
 
-      $empty = $this->checkEmpty([$username, $password]);
+    $empty = $this->checkEmpty([$username, $password]);
 
-      if ($empty && count($empty) > 0) {
-        $authModel = new Auth();
-        $user = $authModel->login($username, $password);
-      } else {
-        $this->view->render('login', ['error' => 'email or password can not be empty']);
-        exit;
-      }
+    if ($empty && count($empty) > 0) {
+      $authModel = new Auth();
+      $user = $authModel->login($username, $password);
+    } else {
+      $this->view->render('login', ['error' => 'email or password can not be empty']);
+      exit;
+    }
 
-      if ($user && $empty && $isAdmin) {
-        $_SESSION['user'] = $user;
-        $_SESSION['settings']['admin'] = true;
-        // Redirect to home or dashboard
-        header('Location: /dashboard');
-        exit;
-      } else if (!$user) {
-        $this->view->render('login', ['error' => 'Invalid username or password.']);
-        exit;
-      } else if ($user && $empty && !$isAdmin) {
-        $_SESSION['user'] = $user;
-        $_SESSION['settings']['admin'] = false;
-        // redirect the non admin to [not dashboard] page
-        header("Location: /viewallposts");
-      } else {
-        // Render login page
-        $this->view->render('login');
-      }
+    if ($user && $empty && $isAdmin) {
+      $_SESSION['user'] = $user;
+      $_SESSION['settings']['admin'] = true;
+      // Redirect to home or dashboard
+      header('Location: /dashboard');
+      exit;
+    } else if (!$user) {
+      $this->view->render('login', ['error' => 'Invalid username or password.']);
+      exit;
+    } else if ($user && $empty && !$isAdmin) {
+      $_SESSION['user'] = $user;
+      $_SESSION['settings']['admin'] = false;
+      // redirect the non admin to [not dashboard] page
+      header("Location: /viewallposts");
     } else {
       // Render login page
       $this->view->render('login');

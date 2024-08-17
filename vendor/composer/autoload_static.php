@@ -31,7 +31,7 @@ class ComposerStaticIniteba462ec9018f27dd782afee828e1834
         ),
         'App\\Traits\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/app/controllers',
+            0 => __DIR__ . '/../..' . '/app/Traits',
         ),
         'App\\Models\\' => 
         array (

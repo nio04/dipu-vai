@@ -11,7 +11,7 @@
 
         <?php foreach ($categories as $category): ?>
           <tr class="grid grid-cols-12">
-            <td class="col-span-8 py-4 px-6 text-gray-600"><?= $category->category_title ?></td>
+            <td class="col-span-8 py-4 px-6 text-gray-600"><?= $category->title ?></td>
             <td class="col-start-11 col-end-13 flex justify-self-start py-4 text-right space-x-2">
               <!-- <a href="#" class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">View</a> -->
               <a href="/category/edit/<?= $category->id ?>" class="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600">Edit</a>

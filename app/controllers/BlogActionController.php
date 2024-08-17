@@ -132,8 +132,7 @@ class BlogActionController extends Controller {
   }
 
   function sort($id) {
-
-    $sortInput = $this->sanitizeInput($id[0]);
+    $sortInput = $this->sanitizeInput($id);
 
     // save the sorting option in settings session
     $_SESSION['settings']['sortBy'] = $sortInput;

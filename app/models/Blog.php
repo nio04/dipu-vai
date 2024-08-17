@@ -34,6 +34,7 @@ class Blog {
   }
 
   public function getTheBlog($id) {
+
     $data = [
       'id' => $id
     ];

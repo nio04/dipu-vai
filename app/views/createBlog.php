@@ -30,7 +30,7 @@
     <label for="category" class="block text-lg font-medium text-gray-700">Category:</label>
     <select id="category" name="category" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500">
       <?php foreach ($categories as $category): ?>
-        <option value="<?= $category->id ?>"><?= $category->category_title ?></option>
+        <option value="<?= $category->id ?>"><?= $category->title ?></option>
       <?php endforeach; ?>
     </select>
   </div>

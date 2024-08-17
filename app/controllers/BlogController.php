@@ -49,6 +49,9 @@ class BlogController extends Controller {
   }
 
   public function show($id) {
+    // echo ("<pre>");
+    // var_dump($id);
+    // echo ("</pre>");
     // load the post data
     $blog = $this->blog->getTheBlog($id);
 

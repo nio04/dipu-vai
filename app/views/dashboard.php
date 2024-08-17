@@ -9,6 +9,8 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
+
+
 <body class="bg-gray-100 flex">
 
   <!-- sidebar -->
@@ -85,7 +87,7 @@
         <?php
         // Check if the user is logged in and the URI is '/blogs'
         if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/category') {
-          echo '<a href="/category/createCategory" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
+          echo '<a href="/category/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
                     Create New Category
                   </a>';
         }
@@ -143,19 +145,20 @@
     <?php endif; ?>
 
     <!-- load creating category view -->
-    <?php if ($_SERVER['REQUEST_URI'] === "/category/createCategory"): ?>
+    <?php if ($_SERVER['REQUEST_URI'] === "/category/create"): ?>
       <?php loadView("createCategory", $errors ?? []) ?>
     <?php endif ?>
 
-    <!-- load category view -->
+
+    <!-- load  all categories view -->
     <?php if ($_SERVER['REQUEST_URI'] === "/category"): ?>
       <?php loadView("category", ['categories' => $categories]) ?>
     <?php endif ?>
 
-    <!-- load category editor with id loaded but we ignore it by regex -->
-    <?php if (preg_match('/[a-z]+\/[a-z]+\//i', trim($_SERVER['REQUEST_URI'], "/"))): ?>
-      <?php loadView("createCategory", ['category' => $category]) ?>
-    <?php endif;  ?>
+    <!-- load edit category view -->
+    <?php if (preg_match("/\/category\/edit/", $_SERVER["REQUEST_URI"])): ?>
+      <?php loadView("editCategory", ['category' => $category]) ?>
+    <?php endif ?>
 
   </main>
 

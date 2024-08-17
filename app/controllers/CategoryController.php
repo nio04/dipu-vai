@@ -21,16 +21,16 @@ class CategoryController extends Controller {
   }
 
   function index() {
-    $categories =  $this->loadCategories();
+    $categories =  $this->load();
     $this->view->render('dashboard', ['categories' => $categories]);
   }
 
-  function loadCategories() {
+  function load() {
     // get all the category titles
     return $this->category->getCategoryTitles();
   }
 
-  function createCategory() {
+  function create() {
     $this->view->render("dashboard");
   }
 
@@ -46,8 +46,13 @@ class CategoryController extends Controller {
     header("Location: /category");
   }
 
-  function submitCategory() {
+  function submit() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      // check category edit or delete
+      $categoryStatus = $_POST['category_status'];
+      $id = $_POST['id'];
+      $title = isset($_POST['title']) ? $_POST['title'] : "";
+
       $errors = [];
 
       // sanitize
@@ -62,18 +67,26 @@ class CategoryController extends Controller {
 
       // check if current category exist already
       $ifExistCategory = $this->category->checkExistCategory(implode($categoryTitle));
+
       if ($ifExistCategory) {
         $errors['category_exist_error'] = 'current category already found. it can not be used again';
-      } else {
-        $this->category->insertCategory(implode($categoryTitle));
       }
+
+      // check category create or edit
+      if ($categoryStatus === "create") {
+        $this->category->insertCategory(implode($categoryTitle));
+      } else {
+        // category edit
+        $this->category->edit($id, $title);
+      }
+
 
       if (empty($errors)) {
         unset($_SESSION['errors']);
         header('Location: /category');
       } else {
         $_SESSION['errors'] = $errors;
-        header("Location:/category/createCategory");
+        header("Location:/category/edit");
         $this->view->render("dashboard");
       }
     }
