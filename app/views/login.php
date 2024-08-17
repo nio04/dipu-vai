@@ -6,13 +6,13 @@
 
   <?php if (isset($errors)): ?>
     <?php foreach ($errors as $error): ?>
-      <div class="bg-red-500 text-white p-4 mb-4 rounded">
+      <div class="bg-red-500 text-white p-4 mb-1 rounded">
         <?php echo $error; ?>
       </div>
     <?php endforeach ?>
   <?php endif; ?>
 
-  <form method="POST" action="/login/submit">
+  <form method="POST" action="/login/submit" class="mt-4">
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text">

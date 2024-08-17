@@ -59,9 +59,11 @@ class AuthController extends Controller {
         $_SESSION['user'] = $user;
         $_SESSION['settings']['admin'] = true;
         header('location: /dashboard');
-      } else {
+      } else if ($user && !$isAdmin) {
         // redirect to view all posts
         return header("location: /viewallposts");
+      } else {
+        $this->view->render("login", ['errors' => ['invalid username or password']]);
       }
     }
   }
