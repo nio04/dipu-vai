@@ -70,7 +70,6 @@
       </form>
     </div>
 
-    <!-- Welcome Message and Buttons -->
     <div class="flex items-center space-x-4">
       <span class="text-xl"><?php echo $username; ?>!</span>
       <?php if ($isLoggedIn): ?>
@@ -85,5 +84,13 @@
         </a>
       <?php endif; ?>
     </div>
+    <!-- register button -->
+    <?php if (!isset($_SESSION['user'])): ?>
+      <div class="flex items-center space-x-2">
+        <a href="/register/load" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+          Register
+        </a>
+      </div>
+    <?php endif; ?>
   </div>
 </nav>

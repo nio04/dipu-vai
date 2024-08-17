@@ -54,14 +54,14 @@ class Router {
       'action' => 'login',
       'httpMethod' => 'get'
     ];
-    $this->routes['/register'] = [
+    $this->routes['/register/load'] = [
       'controller' => AuthController::class,
-      'action' => 'register',
+      'action' => 'registerLoadView',
       'httpMethod' => 'get'
     ];
-    $this->routes['/register'] = [
+    $this->routes['/register/submit'] = [
       'controller' => AuthController::class,
-      'action' => 'register',
+      'action' => 'registerSubmit',
       'httpMethod' => 'post'
     ];
     $this->routes['/logout'] = [
@@ -175,6 +175,9 @@ class Router {
 
     foreach ($this->routes as $routeUri => $routeDetails) {
       if ($this->matchUri($routeUri, $this->uri)) {
+        echo ("<pre>");
+        var_dump($routeDetails);
+        echo ("</pre>");
         if ($httpMethod !== $routeDetails['httpMethod']) {
           throw new \Exception("HTTP method not allowed for this route.");
         }

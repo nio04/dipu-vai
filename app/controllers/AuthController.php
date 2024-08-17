@@ -70,48 +70,47 @@ class AuthController extends Controller {
     }
   }
 
-  public function register() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      // Handle registration form submission
-      $username = $_POST['username'];
-      $email = $_POST['email'];
-      $password = $_POST['password'];
+  function registerLoadView() {
+    $this->view->render('register');
+  }
 
-      // Validate user input
-      if (!$this->validateRequiredFields($_POST, ['username', 'email', 'password'])) {
-        $this->view->render('register', ['error' => 'All fields are required.']);
-        return;
-      }
+  public function registerSubmit() {
+    // Handle registration form submission
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-      if (!$this->validateUsername($username)) {
-        $this->view->render('register', ['error' => 'Invalid username.']);
-        return;
-      }
+    // Validate user input
+    if (!$this->validateRequiredFields($_POST, ['username', 'email', 'password'])) {
+      $this->view->render('register', ['error' => 'All fields are required.']);
+      return;
+    }
 
-      if (!$this->validateEmail($email)) {
-        $this->view->render('register', ['error' => 'Invalid email format.']);
-        return;
-      }
+    if (!$this->validateUsername($username)) {
+      $this->view->render('register', ['error' => 'Invalid username.']);
+      return;
+    }
 
-      $authModel = new Auth();
+    if (!$this->validateEmail($email)) {
+      $this->view->render('register', ['error' => 'Invalid email format.']);
+      return;
+    }
 
-      if ($authModel->isEmailInUse($email)) {
-        $this->view->render('register', [
-          'error' => 'Email already in use. Please choose a different email.'
-        ]);
-      } else {
-        $success = $authModel->register($username, $email, $password);
+    $authModel = new Auth();
 
-        if ($success) {
-          header('Location: /login');
-          exit;
-        } else {
-          $this->view->render('register', ['error' => 'Registration failed.']);
-        }
-      }
+    if ($authModel->isEmailInUse($email)) {
+      $this->view->render('register', [
+        'error' => 'Email already in use. Please choose a different email.'
+      ]);
     } else {
-      // Render registration page
-      $this->view->render('register');
+      $success = $authModel->register($username, $email, $password);
+
+      if ($success) {
+        header('Location: /login');
+        exit;
+      } else {
+        $this->view->render('register', ['error' => 'Registration failed.']);
+      }
     }
   }
 
