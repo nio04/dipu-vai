@@ -110,17 +110,22 @@ class Blog {
     return $this->db->query('DELETE FROM blogs WHERE id = :id', $data);
   }
 
-  function update($data) {
+  function update($id, $title, $description, $tags) {
 
     $data = [
-      'id' => (int) $_POST['id'],
-      'title' => $_POST['title'],
-      "description" => $_POST["description"],
-      "tags" => $_POST["tags"],
+      'id' =>  (int) $id,
+      'title' => $title,
+      "description" => $description,
+      "tags" => $tags,
     ];
+
+    echo ("<pre>");
+    var_dump($data);
+    echo ("</pre>");
 
     $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
   }
+
   function handleFileUpload($file, $targetDir, $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']) {
     // Sanitize file name
     $fileName = basename($file['name']);

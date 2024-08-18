@@ -85,7 +85,15 @@ class BlogActionController extends Controller {
   public function createComment($id) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $commentData = $_POST['comment'];
-      // $commentData = $this->checkEmpty([$commentData]);
+
+      // sanitize
+      $this->sanitize($commentData);
+
+      //  check empty
+      // $emptyCheck = $this->isEmpty([$commentData], ['comment']);
+      // if (is_array($emptyCheck) && isset($emptyCheck[0])) {
+      //   return $this->view->render('blog', ['errors' => $emptyCheck]);
+      // }
 
       if ($commentData) {
         $this->blog->createCommnentForBlog($id, $commentData);

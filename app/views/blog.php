@@ -7,6 +7,10 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
   $goBackTo = '/blogs';
 } else {
   $goBackTo = '/';
+
+  echo ("<pre>");
+  var_dump($errors);
+  echo ("</pre>");
 }
 
 ?>

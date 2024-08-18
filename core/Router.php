@@ -104,7 +104,7 @@ class Router {
     $this->routes['/blogs/createComment'] = [
       'controller' => BlogActionController::class,
       'action' => 'createComment',
-      'httpMethod' => 'get'
+      'httpMethod' => 'post'
     ];
     $this->routes['/blogs/create'] = [
       'controller' => BlogEditController::class,
