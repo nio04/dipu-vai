@@ -19,13 +19,15 @@ class AuthController extends Controller {
   }
 
   function submit() {
-    // Handle login form submission
-    $username = $this->sanitizeInput($_POST['username']);
-    $password = $this->sanitizeInput($_POST['password']);
-    $additionlToken = $this->sanitizeInput($_POST['additional_token']);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $additionlToken = $_POST['additional_token'];
 
+    // sanitize
+    list($username, $password, $additionlToken) = $this->sanitize([$username, $password, $additionlToken]);
+
+    // check if admin
     $isAdmin = $additionlToken === "1234" ? true : false;
-
 
     if ($isAdmin) {
       $_SESSION['settings']['admin'] = true;
@@ -33,33 +35,34 @@ class AuthController extends Controller {
       $_SESSION['settings']['admin'] = false;
     }
 
-    $empty = $this->checkEmpty([$username, $password]);
+    // check if empty
+    $requiredFields = ['username', 'password'];
+    $empty = $this->isEmpty(['username' => $username, 'password' => $password], $requiredFields);
 
-    if ($empty && count($empty) > 0) {
-      $authModel = new Auth();
-      $user = $authModel->login($username, $password);
-    } else {
-      $this->view->render('login', ['error' => 'email or password can not be empty']);
-      exit;
+    if (is_array($empty) && isset($empty[0])) {
+      return $this->view->render("login", ['errors' => $empty]);
     }
 
-    if ($user && $empty && $isAdmin) {
-      $_SESSION['user'] = $user;
-      $_SESSION['settings']['admin'] = true;
-      // Redirect to home or dashboard
-      header('Location: /dashboard');
-      exit;
-    } else if (!$user) {
-      $this->view->render('login', ['error' => 'Invalid username or password.']);
-      exit;
-    } else if ($user && $empty && !$isAdmin) {
-      $_SESSION['user'] = $user;
-      $_SESSION['settings']['admin'] = false;
-      // redirect the non admin to [not dashboard] page
-      header("Location: /viewallposts");
+    // validate login data
+    $validateResults = $this->validateField(['username' => ['data' => $username, 'validateMethod' => 'stringValidate', 'rules' => ['min_length' => 4, 'max_length' => 30]], 'password' => ['data' => $password, 'validateMethod' => 'passwordValidate']]);
+
+
+    if (is_array($validateResults) && isset($validateResults[0])) {
+      return $this->view->render('login', ['errors' => $validateResults]);
     } else {
-      // Render login page
-      $this->view->render('login');
+      // Proceed with validated data
+      $authModel = new Auth();
+      $user = $authModel->login($username, $password);
+
+      if ($user && $isAdmin) {
+        // redirect to dashboard
+        $_SESSION['user'] = $user;
+        $_SESSION['settings']['admin'] = true;
+        header('location: /dashboard');
+      } else {
+        // redirect to view all posts
+        return header("location: /viewallposts");
+      }
     }
   }
 

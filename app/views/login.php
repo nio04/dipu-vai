@@ -1,12 +1,15 @@
 <?php loadPartials("header") ?>
 
+
 <div class="w-2/5 mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-12">
   <h2 class="text-2xl font-bold mb-6">Login</h2>
 
-  <?php if (isset($error)): ?>
-    <div class="bg-red-500 text-white p-4 mb-4 rounded">
-      <?php echo $error; ?>
-    </div>
+  <?php if (isset($errors)): ?>
+    <?php foreach ($errors as $error): ?>
+      <div class="bg-red-500 text-white p-4 mb-4 rounded">
+        <?php echo $error; ?>
+      </div>
+    <?php endforeach ?>
   <?php endif; ?>
 
   <form method="POST" action="/login/submit">
