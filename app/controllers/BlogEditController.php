@@ -22,15 +22,15 @@ class BlogEditController extends Controller {
 
   function create() {
     $categories = $this->category->load();
-    $this->view->render('dashboard', ['categories' => $categories]);
+    $this->view->render('createBlog', ['categories' => $categories]);
   }
 
 
   function edit($id) {
     // fetch data from the database by id   
-    $post = $this->blog->getTheBlog($id);
+    $blog = $this->blog->getTheBlog($id);
     // load a new view and pass the fetched data
-    $this->view->render("edit", ["post" => $post]);
+    $this->view->render("editBlog", ["blog" => $blog]);
   }
 
   public function update() {

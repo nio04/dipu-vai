@@ -12,7 +12,6 @@ class HomeController extends Controller {
       header('Location:/dashboard');
     } else {
       header('location:/viewallposts');
-      $this->view->render('home', ['message' => 'Welcome to the Home Page!']);
     }
   }
 }

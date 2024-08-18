@@ -86,11 +86,6 @@ class AuthController extends Controller {
         return;
       }
 
-      // if (!$this->validatePassword($password)) {
-      //   $this->view->render('register', ['error' => 'Password must be at least 8 characters long and include a number and special character.']);
-      //   return;
-      // }
-
       $authModel = new Auth();
 
       if ($authModel->isEmailInUse($email)) {

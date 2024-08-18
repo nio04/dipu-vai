@@ -13,6 +13,11 @@ function loadView($view, $data = []) {
   require_once __DIR__ . "/app/views/" . $view . ".php";
 }
 
+function loadPartials($partialPath, $data = []) {
+  extract($data);
+  require __DIR__ . "/partials/" . $partialPath . ".php";
+}
+
 function timestamp() {
   return date('Y-m-d H:i:s');
 }

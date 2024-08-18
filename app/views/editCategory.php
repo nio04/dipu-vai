@@ -1,27 +1,14 @@
-<?php $errors = $_SESSION['errors'] ?? [] ?>
+<?php loadPartials("header") ?>
+<?php loadPartials("navDashboard") ?>
 
-<?php foreach ($errors as $error): ?>
-  <div class="bg-red-500 text-white p-4 mb-4 rounded-lg mt-4">
-    <?php echo htmlspecialchars($error); ?>
-  </div>
+<?php $errors = $errors ?? [] ?>
+<?php $category = $category ?? [] ?>
+<!-- Sidebar and Main Container -->
+<div class="flex w-full">
+  <?php loadPartials("asideDashboard") ?>
+  <main id="mainContent" class="w-4/5 p-6 transition-margin duration-300 ml-auto">
+    <?php loadPartials("editCategory", ["errors" => $errors, 'category' => $category]) ?>
+  </main>
+</div>
 
-<?php endforeach; ?>
-
-
-<form action="/category/submit" method="POST" class="bg-white p-8 rounded-lg shadow-lg space-y-6 mt-2 max-w-6xl mx-auto">
-  <input type="hidden" name="category_status" value="edit">
-  <input type="hidden" name="id" value="<?= $category->id ?>">
-
-  <!-- Title Field -->
-  <div class="mb-6">
-    <label for="title" class="block text-lg font-medium text-gray-700">
-      update category title
-    </label>
-    <input type="text" id="title" name="title" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" value="<?php echo isset($category->title) ? $category->title : "" ?>">
-  </div>
-
-  <!-- Submit Button -->
-  <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-    update the category
-  </button>
-</form>
+<?php loadPartials("footer") ?>

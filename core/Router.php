@@ -47,6 +47,12 @@ class Router {
       'httpMethod' => 'get'
     ];
 
+    $this->routes['/register'] = [
+      'controller' => AuthController::class,
+      'action' => 'register',
+      'httpMethod' => 'post'
+    ];
+
     $this->routes['/viewallposts'] = [
       'controller' => BlogController::class,
       'action' => 'viewallposts',
@@ -119,7 +125,7 @@ class Router {
     ];
     $this->routes['/category/create'] = [
       'controller' => CategoryController::class,
-      'action' => 'index',
+      'action' => 'create',
       'httpMethod' => 'get'
     ];
     $this->routes['/category/edit'] = [
