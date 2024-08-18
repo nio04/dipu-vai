@@ -116,7 +116,6 @@ class BlogActionController extends Controller {
       $searchInput = $_POST['search'];
       // $searchInput = $this->checkEmpty(['search' => $searchInput]);
 
-
       // turn user input to lower case
       $searchInput = strtolower($searchInput);
 
