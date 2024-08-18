@@ -19,7 +19,7 @@ class Category {
     $data = [
       "title" => $title,
     ];
-    return $this->db->query("SELECT * FROM category WHERE title = :title", $data, 'single');
+    return $this->db->query("SELECT title FROM category WHERE title = :title", $data, 'single');
   }
 
   function getCategoryDetail($id) {

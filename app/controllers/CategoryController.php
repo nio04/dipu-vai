@@ -13,16 +13,21 @@ class CategoryController extends Controller {
 
   private $blog;
   private $category;
+  private $categories;
 
   public function __construct() {
+
     $this->blog = new Blog();
     $this->category = new Category();
+
+    $this->categories = $this->load();
+
     parent::__construct();
   }
 
   function index() {
-    $categories =  $this->load();
-    $this->view->render('category', ['categories' => $categories]);
+
+    $this->view->render('category', ['categories' => $this->categories]);
   }
 
   function load() {
@@ -31,7 +36,7 @@ class CategoryController extends Controller {
   }
 
   function create() {
-    $this->view->render("createCategory", ["category" => ""]);
+    $this->view->render("createCategory");
   }
 
   function edit($id) {
@@ -53,43 +58,25 @@ class CategoryController extends Controller {
       $id = $categoryStatus === "edit" ? $_POST['id'] : "";
       $title = isset($_POST['title']) ? $_POST['title'] : "";
 
-      $errors = [];
-
       // sanitize
       $title = $_POST['title'];
       // check if field empty
-      // $title = $title;
+      $title = $this->sanitize($title);
 
       // set empty field error
-      if (strlen($title) < 1) {
-        $errors['category_empty_error'] = 'category field can not be empty';
-        return $this->view->render('createCategory', ['errors' => $errors]);
-      }
-      // check if current category exist already
-      // $ifExistCategory = $this->category->checkExistCategory(implode($title));
-      $ifExistCategory = $this->category->checkExistCategory($title);
+      $emptyCheck = $this->isEmpty(['title' => $title], ['title']);
 
-      if ($ifExistCategory) {
-        $errors['category_exist_error'] = 'current category already found. it can not be used again';
-        return $this->view->render('createCategory', ['errors' => $errors, 'category' => $title]);
+      if (is_array($emptyCheck) && isset($emptyCheck[0])) {
+        return $this->view->render('createCategory', ['errors' => $emptyCheck]);
       }
 
-      // check category create or edit
-      if ($categoryStatus === "create") {
+      $checkIfAlreadyExist = $this->category->checkExistCategory($title);
+
+      if ($checkIfAlreadyExist) {
+        return $this->view->render('createCategory', ['errors' => ['category title already found. can not use this title again'], 'category' => $title]);
+      } else {
         $this->category->insertCategory($title);
-      } else {
-        // category edit
-        $this->category->edit($id, $title);
-      }
-
-
-      if (empty($errors)) {
-        // unset($_SESSION['errors']);
-        header('Location: /category');
-      } else {
-        // $_SESSION['errors'] = $errors;
-        // header("Location:/category/edit");
-        // $this->view->render("dashboard");
+        header("Location: /category");
       }
     }
   }

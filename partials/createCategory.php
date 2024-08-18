@@ -1,4 +1,5 @@
 <?php $errors = isset($errors) ? $errors : [] ?>
+
 <?php $category = strlen($category) > 0 ? $category : "" ?>
 
 
@@ -18,7 +19,7 @@
     <label for="title" class="text-2xl font-bold text-gray-600 text-left mb-8">
       Create a new category
     </label>
-    <input type="text" id="title" name="title" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" value="<?php echo isset($category) ? $category : "" ?>">
+    <input type="text" id="title" name="title" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" value="<?php echo $category ?>">
   </div>
 
   <!-- Submit Button -->

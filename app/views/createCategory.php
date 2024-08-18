@@ -2,7 +2,7 @@
 <?php loadPartials("navDashboard") ?>
 
 <?php $errors = $errors ?? [] ?>
-<?php $category = $category ?? [] ?>
+<?php $category = $category ?? "" ?>
 <!-- Sidebar and Main Container -->
 <div class="flex w-full">
   <?php loadPartials("asideDashboard") ?>
