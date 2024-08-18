@@ -23,12 +23,14 @@ class BlogController extends Controller {
   public $blogAction;
   public $blogEdit;
   public $category;
+  public $categoriesList;
 
   public function __construct() {
     $this->blog = new Blog();
     $this->blogAction = new BlogActionController();
     $this->category = new CategoryController();
     $this->blogEdit = new BlogEditController();
+    $this->categoriesList = $this->category->load();
     parent::__construct();
   }
 
@@ -45,7 +47,7 @@ class BlogController extends Controller {
     // add author object to the blog object [append]
     $allBlogs = $this->appendAuthorToBlog($allBlogs,);
 
-    $this->view->render('viewallposts', ['blogs' => $allBlogs]);
+    $this->view->render('viewallposts', ['blogs' => $allBlogs, 'categories' => $this->categoriesList]);
   }
 
   public function show($id) {

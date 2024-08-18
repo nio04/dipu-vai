@@ -11,7 +11,7 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['user']['username']) : 'Gue
 $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'];
 ?>
 
-<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '']); ?>
+<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '', 'categories' => $categories]); ?>
 
 <!-- Blog Posts -->
 <div class="grid grid-cols-3 gap-6 px-16 p-16">

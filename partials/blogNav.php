@@ -16,13 +16,9 @@
         </svg>
       </button>
       <ul class="dropdown-menu absolute hidden text-gray-700 pt-1 pb-1 bg-white rounded shadow-lg w-48 z-10 transition-all">
-        <li><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">General</a></li>
-        <li><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Howto</a></li>
-        <li><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Guide</a></li>
-        <li><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">DIY</a></li>
-        <li><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Novel</a></li>
-        <li><a class="bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Picture Story</a></li>
-        <li><a class="rounded-b bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#">Analysis Report</a></li>
+        <?php foreach ($categories as $category): ?>
+          <li><a class="rounded-t bg-blue-100 hover:bg-blue-200 py-2 px-4 block whitespace-no-wrap" href="#"><?= $category->title ?></a></li>
+        <?php endforeach ?>
       </ul>
     </div>
 
