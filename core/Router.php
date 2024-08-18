@@ -12,24 +12,38 @@ use App\Controllers\DashboardController;
 
 class Router {
   /**
-   * Array to store all registered routes
-   * 
+   * Stores all registered routes.
+   *
    * @var array
    */
   protected array $routes = [];
+
+  /**
+   * Stores the processed URI.
+   *
+   * @var string
+   */
   protected string $uri;
+
+  /**
+   * Stores extracted parameters from the URI.
+   *
+   * @var mixed
+   */
   protected $params;
 
   /**
-   * Manually add routes in this method.
-   * Automatically registers routes in the router
+   * Automatically registers routes by mapping URIs to controllers and actions.
    */
   public function autoRegisterRoute(): void {
+    // Home routes
     $this->routes['/'] = [
       'controller' => HomeController::class,
       'action' => 'index',
       'httpMethod' => 'get'
     ];
+
+    // Authentication routes
     $this->routes['/login/submit'] = [
       'controller' => AuthController::class,
       'action' => 'submit',
@@ -40,19 +54,23 @@ class Router {
       'action' => 'login',
       'httpMethod' => 'get'
     ];
-
     $this->routes['/register'] = [
       'controller' => AuthController::class,
       'action' => 'register',
       'httpMethod' => 'get'
     ];
-
     $this->routes['/register'] = [
       'controller' => AuthController::class,
       'action' => 'register',
       'httpMethod' => 'post'
     ];
+    $this->routes['/logout'] = [
+      'controller' => AuthController::class,
+      'action' => 'logout',
+      'httpMethod' => 'post'
+    ];
 
+    // Blog routes
     $this->routes['/viewallposts'] = [
       'controller' => BlogController::class,
       'action' => 'viewallposts',
@@ -66,11 +84,6 @@ class Router {
     $this->routes['/blogs/sort'] = [
       'controller' => BlogActionController::class,
       'action' => 'sort',
-      'httpMethod' => 'get'
-    ];
-    $this->routes['/dashboard'] = [
-      'controller' => DashboardController::class,
-      'action' => 'index',
       'httpMethod' => 'get'
     ];
     $this->routes['/blogs/show'] = [
@@ -113,11 +126,15 @@ class Router {
       'action' => 'delete',
       'httpMethod' => 'post'
     ];
-    $this->routes['/logout'] = [
-      'controller' => AuthController::class,
-      'action' => 'logout',
-      'httpMethod' => 'post'
+
+    // Dashboard route
+    $this->routes['/dashboard'] = [
+      'controller' => DashboardController::class,
+      'action' => 'index',
+      'httpMethod' => 'get'
     ];
+
+    // Category routes
     $this->routes['/category'] = [
       'controller' => CategoryController::class,
       'action' => 'index',
@@ -143,60 +160,40 @@ class Router {
       'action' => 'submit',
       'httpMethod' => 'post'
     ];
-    $this->routes['/blogs'] = [
-      'controller' => BlogController::class,
-      'action' => 'viewallposts',
-      'httpMethod' => 'get'
-    ];
-    $this->routes['/blogs'] = [
-      'controller' => BlogController::class,
-      'action' => 'viewAllBlogsAsAdmin',
-      'httpMethod' => 'get'
-    ];
   }
 
   /**
-   * Responsible for dispatching routes
-   * 
+   * Dispatches the request to the appropriate controller and action based on the URI.
+   *
    * @throws \Exception
-   * @return void
    */
   public function dispatch(): void {
     $uri = rtrim($_SERVER['REQUEST_URI'], '/');
     $httpMethod = strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
-    // Extract parameters and update URI
+
     $this->extractParams($uri);
 
     foreach ($this->routes as $routeUri => $routeDetails) {
-      // Check if the current route matches the requested URI
       if ($this->matchUri($routeUri, $this->uri)) {
-        // Validate the HTTP method
-        $method = $routeDetails['httpMethod'] ?? 'get';
-
-        if ($httpMethod !== $method) {
+        if ($httpMethod !== $routeDetails['httpMethod']) {
           throw new \Exception("HTTP method not allowed for this route.");
         }
 
-        // Instantiate the controller
         $controller = new $routeDetails['controller'];
-
-        // Extract action and params from the URI
         [$action, $params] = $this->extractActionAndParams($routeUri, $uri);
         $action = $routeDetails['action'] ?? $action;
 
-        // Default action to 'index' if not provided
         if (empty($action)) {
           $action = 'index';
         }
 
-        // Call the action on the controller
         if (method_exists($controller, $action)) {
           call_user_func_array([$controller, $action], [$this->params]);
         } else {
           throw new \Exception("Action $action not found in controller.");
         }
 
-        return; // Exit after the first successful route match
+        return;
       }
     }
 
@@ -204,87 +201,52 @@ class Router {
   }
 
   /**
-   * Extracts parameters and updates the URI
-   * 
+   * Extracts parameters from the URI and updates the internal URI state.
+   *
    * @param string $uri
    */
-  private function extractParams(string $uri) {
-    // Split the URI into segments
+  private function extractParams(string $uri): void {
     $uriSegments = explode('/', trim($uri, '/'));
 
-    // Initialize variable for the numeric third segment
-    $params = null;
-
-    // Check if the third segment is numeric
     if (isset($uriSegments[2])) {
-      // Extract the third segment
-      $params = $uriSegments[2];
-
-      // Remove the third segment from the URI segments
+      $this->params = $uriSegments[2];
       unset($uriSegments[2]);
-
-      // Re-index the array to prevent gaps
       $uriSegments = array_values($uriSegments);
     }
 
-    // Rebuild the URI without the numeric third segment
-    $uri = implode('/', $uriSegments);
-    if ($uri === '') {
-      $uri = '/';
-    }
-
-    $uri = "/" . $uri;
-
-    $this->uri = $uri;
-    $this->params = $params;
-
-    // Return the updated URI and parameters
-    // return [$uri, $numericParam ? $numericParam : []];
+    $uri = implode('/', $uriSegments) ?: '/';
+    $this->uri = "/$uri";
   }
 
   /**
-   * Matches the request URI against a registered route URI
-   * 
+   * Checks if the request URI matches a registered route URI.
+   *
    * @param string $routeUri
    * @param string $requestUri
    * @return bool
    */
   private function matchUri(string $routeUri, string $requestUri): bool {
-    // echo $routeUri;
-    // Remove trailing slashes for matching purposes
-    $routeUri = rtrim($routeUri, '/');
-    $requestUri = rtrim($requestUri, '/');
-
-    // Exact match
-    return $routeUri === $requestUri;
+    return rtrim($routeUri, '/') === rtrim($requestUri, '/');
   }
 
   /**
-   * Extracts action and parameters from the request URI based on the route URI
-   * 
+   * Extracts action and parameters from the request URI based on the route URI.
+   *
    * @param string $routeUri
    * @param string $requestUri
-   * @return array [string, array]
+   * @return array
    */
   private function extractActionAndParams(string $routeUri, string $requestUri): array {
-    $routeSegments = explode('/', trim($routeUri, '/'));
-    $requestSegments = explode('/', trim($requestUri, '/'));
+    $routeUri = rtrim($routeUri, '/');
+    $requestUri = rtrim($requestUri, '/');
 
-    $action = '';
-    $params = [];
-
-    // Check if URI segments exceed route segments
-    if (count($requestSegments) > count($routeSegments)) {
-      $action = $requestSegments[count($routeSegments)] ?? null;
-      $remainingSegments = array_slice($requestSegments, count($routeSegments));
-      foreach ($remainingSegments as $segment) {
-        // Check if the segment is a digit (parameter)
-        if (preg_match('/^\d+$/', $segment)) {
-          $params[] = $segment;
-        }
-      }
+    if (preg_match("#^$routeUri/?$#", $requestUri)) {
+      $uriSegments = explode('/', trim($requestUri, '/'));
+      $action = $uriSegments[2] ?? null;
+      $params = array_slice($uriSegments, 3);
+      return [$action, $params];
     }
 
-    return [$action, $params];
+    return [null, []];
   }
 }
