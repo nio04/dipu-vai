@@ -1,8 +1,7 @@
-<?php if (isset($_SESSION['blog_create_err'])): ?>
-  <div class="w-96 bg-red-500 text-white p-4 ml-8 mt-8 rounded-lg">
-    <?php echo $_SESSION['blog_create_err']['field_require']; ?>
-    <?php unset($_SESSION['blog_create_err']) ?>
-  </div>
+<?php if (isset($errors)): ?>
+  <?php foreach ($errors as $error): ?>
+    <div class="bg-red-500 text-white p-4 mx-12 rounded-lg"><?= $error ?></div>
+  <?php endforeach ?>
 <?php endif; ?>
 
 <!-- Form -->

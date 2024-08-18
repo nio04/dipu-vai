@@ -26,6 +26,12 @@
             <h2 class="text-2xl font-semibold mb-2">View All The Categories</h2>
             <p class="text-lg mt-6">Browse all the categories and manage them.</p>
           </a>
+
+          <!-- View All Categories Card -->
+          <a href="/category/create" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+            <h2 class="text-2xl font-semibold mb-2">Create a new category</h2>
+            <p class="text-lg mt-6">Create and manage categories</p>
+          </a>
         </div>
       </div>
     <?php endif ?>

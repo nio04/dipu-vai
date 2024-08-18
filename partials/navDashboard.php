@@ -1,4 +1,4 @@
-<nav class="bg-blue-600 p-4 text-white flex items-center sticky top-0 left-0">
+<nav class="bg-blue-600 p-4 text-white flex items-center sticky top-0 left-0 z-50">
   <!-- Logo Link -->
   <a href="/dashboard" class="text-3xl font-bold text-yellow-400 mr-6">
     Bloggies
@@ -11,7 +11,7 @@
     // Check if the user is logged in and the URI is '/blogs'
     if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs' || $_SERVER['REQUEST_URI'] === '/dashboard') {
       echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
-                    Create New Posts
+                    Create A New Post
                   </a>';
     }
     ?>

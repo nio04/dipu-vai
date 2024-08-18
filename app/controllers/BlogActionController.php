@@ -147,7 +147,7 @@ class BlogActionController extends Controller {
     $this->view->render("viewallposts", ["blogs" => $sortResult]);
   }
 
-  public function submitBlog() {
+  public function submitBlog($categoriesLists) {
     $errors = [];
 
     $title = $_POST['title'];
@@ -186,8 +186,9 @@ class BlogActionController extends Controller {
 
     // if error exist redirect to create-blog route again with error
     if (!empty($errors)) {
-      header('Location: /blogs/create');
-      $_SESSION['blog_create_err'] = $errors;
+      return $this->view->render("createBlog", ["errors" => $errors, 'categories' => $categoriesLists]);
+      // header('Location: /blogs/create');
+      // $_SESSION['blog_create_err'] = $errors;
     } else {
       // no error generated
       $data =
@@ -197,7 +198,7 @@ class BlogActionController extends Controller {
       $this->blog->insertBlogData($data);
 
       header('Location: /blogs');
-      unset($_SESSION['blog_create_err']);
+      // unset($_SESSION['blog_create_err']);
     }
   }
 }

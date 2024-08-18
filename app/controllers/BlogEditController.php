@@ -12,6 +12,7 @@ class BlogEditController extends Controller {
   public $blogAction;
   public $blog;
   public $category;
+  public $categoriesLists;
 
   public function __construct() {
     $this->blogAction = new BlogActionController();
@@ -21,8 +22,8 @@ class BlogEditController extends Controller {
   }
 
   function create() {
-    $categories = $this->category->load();
-    $this->view->render('createBlog', ['categories' => $categories]);
+    $this->categoriesLists = $this->category->load();
+    return $this->view->render('createBlog', ['categories' => $this->categoriesLists]);
   }
 
 
@@ -44,7 +45,7 @@ class BlogEditController extends Controller {
   }
 
   public function submit() {
-    $this->blogAction->submitBlog();
-    $this->view->render('dashboard');
+
+    return $this->blogAction->submitBlog($this->categoriesLists);
   }
 }
