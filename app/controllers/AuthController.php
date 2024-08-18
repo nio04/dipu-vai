@@ -110,29 +110,47 @@ class AuthController extends Controller {
     $validateResults = $this->validateField(['username' => ['data' => $username, 'validateMethod' => 'stringValidate', 'rules' => ['min_length' => 4, 'max_length' => 30]], 'email' => ['data' => $email, 'validateMethod' => 'emailValidate'], 'password' => ['data' => $password, 'validateMethod' => 'passwordValidate', 'rules' => ['min_length' => 4, 'max_length' => 30]]]);
 
     if (is_array($validateResults) && isset($validateResults[0])) {
+      // invalid data
       return $this->view->render('register', ['errors' => $validateResults]);
     } else {
       // no invalid data
       $authModel = new Auth();
+      $checkIfAlreadyInUse = $authModel->isEmailAndUsernameInUse($email, $username);
 
+      if ($checkIfAlreadyInUse) {
+        $this->view->render("register", ["errors" => ['email or username already in use']]);
+      } else {
+        $userModel = new Auth();
+        $userModel = $userModel->register($username, $email, $password);
 
-      try {
-        $registerId = $authModel->register($username, $email, $password);
-        // get user data by register id
-        // set it to session
-        header('location:/');
-      } catch (\PDOException $e) {
-        $this->view->render('register', ['errors' => [$e->getMessage()]]);
+        // get user object
+        $userData = new User();
+        $userData = $userData->getUser($userModel);
 
-        // function vd($data) {
-        //   $trace = debug_backtrace();
-        //   $caller = $trace[0];
-        //   echo '<br><br>' . 'File: ' . $caller['file'] . '&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Line: ' . $caller['line'] . '<br>';
-        //   echo '<div class="var-dump">' . nl2br(htmlspecialchars(var_export($data, true))) . '</div>';
-        // }
+        $_SESSION['user'] = [
+          'id' => $userData->id,
+          'email' => $userData->email,
+          'username' => $userData->username
+        ];
 
-        // vd($e->getMessage());
+        header('location: /viewallposts');
       }
+
+
+      // echo ("<pre>");
+      // var_dump($t);
+      // echo ("</pre>");
+
+
+      // try {
+      //   $registerId = $authModel->register($username, $email, $password);
+      //   // get user data by register id
+      //   // set it to session
+      //   header('location:/');
+      // } catch (\PDOException $e) {
+      //   $this->view->render('register', ['errors' => [$e->getMessage()]]);
+
+      // }
 
       // if ($authModel->isEmailInUse($email)) {
       //   echo ("<pre>");

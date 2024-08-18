@@ -35,9 +35,10 @@ class Auth extends Model {
     return $this->db->lastInsertId();
   }
 
-  public function isEmailInUse($email) {
-    $stmt = $this->db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+  public function isEmailAndUsernameInUse($email, $username) {
+    $stmt = $this->db->prepare("SELECT email, username FROM users WHERE email = :email AND username = :username");
     $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':username', $username);
     $stmt->execute();
     return $stmt->fetchColumn() > 0;
   }

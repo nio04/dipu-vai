@@ -175,9 +175,6 @@ class Router {
 
     foreach ($this->routes as $routeUri => $routeDetails) {
       if ($this->matchUri($routeUri, $this->uri)) {
-        echo ("<pre>");
-        var_dump($routeDetails);
-        echo ("</pre>");
         if ($httpMethod !== $routeDetails['httpMethod']) {
           throw new \Exception("HTTP method not allowed for this route.");
         }

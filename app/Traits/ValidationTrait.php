@@ -33,9 +33,6 @@ trait ValidationTrait {
         foreach ($validateFields as $fieldName => $details) {
             $value = $details['data'] ?? null;
             $method = $details['validateMethod'] ?? 'stringValidate'; // Default to 'stringValidate'
-            echo ("<pre>");
-            var_dump($method);
-            echo ("</pre>");
             $customRules = $details['rules'] ?? [];
 
             if (method_exists($this, $method)) {

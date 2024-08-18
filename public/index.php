@@ -11,7 +11,8 @@ $router = new Router();
 $router->autoRegisterRoute();
 $router->dispatch();
 
-// unset($_SESSION);
+// unset($_SESSION['user']);
+// unset($_SESSION['settings']);
 
 echo ("<pre>");
 var_dump($_SESSION);
