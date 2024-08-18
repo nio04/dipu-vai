@@ -8,56 +8,73 @@ const dropdownButton = document.getElementById('dropdownButton');
 const dropdownMenu = document.getElementById('dropdownMenu');
 
 // Toggle dropdown menu
-postsDropdownButton.addEventListener('click', function () {
-  console.log("dropdown")
-  postsDropdown.classList.toggle('hidden');
-});
-
+if (postsDropdownButton) {
+  postsDropdownButton.addEventListener('click', function () {
+    postsDropdown.classList.toggle('hidden');
+  });
+}
 
 // Open the sidebar
-openSidebarButton.addEventListener('click', function() {
-  sidebar.classList.remove('-translate-x-64');
-  openSidebarButton.classList.add('hidden');
-});
+if (openSidebarButton) { 
+  openSidebarButton.addEventListener('click', function() {
+    sidebar.classList.remove('-translate-x-64');
+    openSidebarButton.classList.add('hidden');
+  });
+}
 
 // Close the sidebar
-closeSidebarButton.addEventListener('click', function() {
-  sidebar.classList.add('-translate-x-64');
-  mainContent.classList.remove('ml-64');
-  openSidebarButton.classList.remove('hidden');
-});
+if (closeSidebarButton) { 
+  closeSidebarButton.addEventListener('click', function() {
+    sidebar.classList.add('-translate-x-64');
+    mainContent.classList.remove('ml-64');
+    openSidebarButton.classList.remove('hidden');
+  });
+}
 
 
 // Show the dropdown menu on hover
-document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseenter', function() {
-  this.querySelector('.dropdown-menu').classList.remove('hidden');
-});
+if (document.querySelector('.dropdown-menu')) { 
+  document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseenter', function() {
+    this.querySelector('.dropdown-menu').classList.remove('hidden');
+  });
+}
 
 // Hide the dropdown menu when not hovering
-document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseleave', function() {
-  this.querySelector('.dropdown-menu').classList.add('hidden');
-});
+if (document.querySelector('.dropdown-menu')) {
+ document.querySelector('.dropdown-menu').parentNode.addEventListener('mouseleave', function() {
+    this.querySelector('.dropdown-menu').classList.add('hidden');
+  });
+}
 
 // Show dropdown on mouse enter
-dropdownButton.addEventListener('mouseenter', function() {
-  dropdownMenu.classList.remove('hidden');
-  dropdownButton.setAttribute('aria-expanded', 'true');
-});
+if (dropdownButton) {
+ dropdownButton.addEventListener('mouseenter', function() {
+    dropdownMenu.classList.remove('hidden');
+    dropdownButton.setAttribute('aria-expanded', 'true');
+  });
+}
 
 // Hide dropdown on mouse leave
-dropdownButton.addEventListener('mouseleave', function() {
-  dropdownMenu.classList.add('hidden');
-  dropdownButton.setAttribute('aria-expanded', 'false');
-});
+if (dropdownButton) {
+ dropdownButton.addEventListener('mouseleave', function() {
+    dropdownMenu.classList.add('hidden');
+    dropdownButton.setAttribute('aria-expanded', 'false');
+  });
+}
 
 // Ensure dropdown hides when mouse leaves the dropdown menu
-dropdownMenu.addEventListener('mouseleave', function() {
-  dropdownMenu.classList.add('hidden');
-  dropdownButton.setAttribute('aria-expanded', 'false');
-});
+if (dropdownMenu) { 
+  dropdownMenu.addEventListener('mouseleave', function() {
+    dropdownMenu.classList.add('hidden');
+    dropdownButton.setAttribute('aria-expanded', 'false');
+  });
+}
 
 // Keep dropdown visible when hovering over it
-dropdownMenu.addEventListener('mouseenter', function() {
-  dropdownMenu.classList.remove('hidden');
-  dropdownButton.setAttribute('aria-expanded', 'true');
-});
+if (dropdownMenu) {
+ dropdownMenu.addEventListener('mouseenter', function() {
+    dropdownMenu.classList.remove('hidden');
+    dropdownButton.setAttribute('aria-expanded', 'true');
+  });
+}
+  

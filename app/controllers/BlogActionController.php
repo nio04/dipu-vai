@@ -6,6 +6,7 @@ use App\Traits\ValidationTrait;
 use App\Traits\BlogTraits;
 use Core\Controller;
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\User;
 
 /**
@@ -18,8 +19,12 @@ class BlogActionController extends Controller {
   use BlogTraits;
 
   public $blog;
+  private $categories;
   public function __construct() {
     $this->blog = new Blog();
+    $category = new Category();
+
+    $this->categories = $category->getCategoryTitles();
     parent::__construct();
   }
 
@@ -161,43 +166,47 @@ class BlogActionController extends Controller {
      */
     $image_error = true;
 
-    // sanitize file name
-    $fileName = basename($cover_image['name']);
+    // sanitize
+    $this->sanitize(['title' => $title, 'description' => $description, 'tags' => $tags, 'category' => $category,]);
 
-    $targetDir = basePath('uploads/blogs/cover_images/');
-    $targetFile = $targetDir . $fileName;
+    // handle file sanitize & upload
+    $this->blog->handleFileUpload($cover_image, 'uploads/blogs/cover_images/');
 
-    // check type extension
-    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    $allowedType = ['jpg', 'jpeg', 'png', 'gif'];
+    // check empty
+    $requiredFields = ['title', 'description'];
+    $emptyCheck = $this->isEmpty(['title' => $title, 'description' => $description,], $requiredFields);
 
-    if (in_array($fileType, $allowedType)) {
-      // move file to the target directory
-      if (move_uploaded_file($cover_image['tmp_name'], $targetFile)) {
-        // insert to DB
-        $image_error = false;
-      }
+    if (is_array($emptyCheck) && isset($emptyCheck[0])) {
+      return $this->view->render('createBlog', ['errors' => $emptyCheck, 'categories' => $this->categories]);
     }
 
-    if (empty($title) || empty($description) || empty($tags) || $image_error === true) {
-      $errors['field_require'] = 'all the filelds must be filled or something else wrong';
-    }
+    // validate data
+    $validationResult = $this->validateField(
+      [
+        'title' =>
+        [
+          'data' => $title,
+          'validateMethod' => 'stringValidate',
+          'rules' => ['min_length' => 5, 'max_length' => 30]
+        ],
+        'description' =>
+        [
+          'data' => $description,
+          'validateMethod' => 'stringValidate',
+          'rules' => ['min_length' => 10, 'max_length' => 100000]
+        ],
+      ]
+    );
 
-    // if error exist redirect to create-blog route again with error
-    if (!empty($errors)) {
-      return $this->view->render("createBlog", ["errors" => $errors, 'categories' => $categoriesLists]);
-      // header('Location: /blogs/create');
-      // $_SESSION['blog_create_err'] = $errors;
+    if (is_array($validationResult) && isset($validationResult[0])) {
+      return $this->view->render('createBlog', ['categories' => $this->categories, 'errors' => $validationResult, 'title' => $title, 'description' => $description, 'tags' => $tags]); // Return validation errors.
     } else {
-      // no error generated
       $data =
-        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category, 'image' => $fileName];
+        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category, 'image' => $cover_image['name']];
 
-      // insert & success result store
+      // insert data
       $this->blog->insertBlogData($data);
-
-      header('Location: /blogs');
-      // unset($_SESSION['blog_create_err']);
+      header('location: /blogs');
     }
   }
 }

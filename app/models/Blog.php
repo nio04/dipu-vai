@@ -121,4 +121,38 @@ class Blog {
 
     $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
   }
+  function handleFileUpload($file, $targetDir, $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']) {
+    // Sanitize file name
+    $fileName = basename($file['name']);
+
+    // Define the target file path
+    $targetFile = $targetDir . $fileName;
+
+    // Check file type extension
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    // Validate file type
+    if (in_array($fileType, $allowedTypes)) {
+      // Move file to the target directory
+      if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+        // File upload successful
+        return [
+          'success' => true,
+          'file_path' => $targetFile
+        ];
+      } else {
+        // File upload failed
+        return [
+          'success' => false,
+          'error' => 'Failed to move uploaded file.'
+        ];
+      }
+    } else {
+      // Invalid file type
+      return [
+        'success' => false,
+        'error' => 'Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes)
+      ];
+    }
+  }
 }

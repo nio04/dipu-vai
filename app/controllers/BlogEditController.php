@@ -45,7 +45,6 @@ class BlogEditController extends Controller {
   }
 
   public function submit() {
-
     return $this->blogAction->submitBlog($this->categoriesLists);
   }
 }

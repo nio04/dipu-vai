@@ -35,7 +35,7 @@ class BlogController extends Controller {
   // for dashboard
   public function viewAllBlogsAsAdmin() {
     $allBlogs = $this->blog->getAllBlogs();
-    $this->view->render('dashboard', ['blogs' => $allBlogs]);
+    return $this->view->render('blogs', ['blogs' => $allBlogs]);
   }
 
   // not for dashboard

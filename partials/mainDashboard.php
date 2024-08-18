@@ -35,20 +35,3 @@
         </div>
       </div>
     <?php endif ?>
-
-    <!-- Load various views based on the URI -->
-    <?php if ($_SERVER['REQUEST_URI'] === '/blogs'): ?>
-      <?php loadView('blogs', ['blogs' => $blogs]) ?>
-    <?php endif; ?>
-
-    <?php if ($_SERVER['REQUEST_URI'] === "/category/create"): ?>
-      <?php loadView("createCategory", $errors ?? []) ?>
-    <?php endif ?>
-
-    <?php if ($_SERVER['REQUEST_URI'] === "/category"): ?>
-      <?php loadView("category", ['categories' => $categories]) ?>
-    <?php endif ?>
-
-    <?php if (preg_match("/\/category\/edit/", $_SERVER["REQUEST_URI"])): ?>
-      <?php loadView("editCategory", ['category' => $category]) ?>
-    <?php endif ?>

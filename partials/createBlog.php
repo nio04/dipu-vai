@@ -1,6 +1,6 @@
 <?php if (isset($errors)): ?>
   <?php foreach ($errors as $error): ?>
-    <div class="bg-red-500 text-white p-4 mx-12 rounded-lg"><?= $error ?></div>
+    <div class="bg-red-500 text-white p-4 mx-12 rounded-lg mb-4"><?= $error ?></div>
   <?php endforeach ?>
 <?php endif; ?>
 
@@ -12,19 +12,19 @@
   <!-- Title Field -->
   <div class="mb-6">
     <label for="title" class="block text-lg font-medium text-gray-700">Title:</label>
-    <input type="text" id="title" name="title" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500">
+    <input type="text" id="title" name="title" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" value="<?php echo $title ?? "" ?>">
   </div>
 
   <!-- Description Field -->
   <div class="mb-6">
     <label for="description" class="block text-lg font-medium text-gray-700">Description:</label>
-    <textarea id="description" name="description" rows="6" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500"></textarea>
+    <textarea id="description" name="description" rows="6" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500"><?php echo $description ?? '' ?></textarea>
   </div>
 
   <!-- Tags Field -->
   <div class="mb-6">
     <label for="tags" class="block text-lg font-medium text-gray-700">Tags:</label>
-    <input type="text" id="tags" name="tags" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500">
+    <input type="text" id="tags" name="tags" class="mt-2 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" value="<?php echo $tags ?? "" ?>">
   </div>
 
   <!-- Category Field -->
