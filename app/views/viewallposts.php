@@ -1,6 +1,17 @@
 <?php loadPartials("header") ?>
 <!-- Navbar -->
+<?php
+// Check if a user is logged in from the session
+$isLoggedIn = isset($_SESSION['user']['username']);
+$username = $isLoggedIn ? htmlspecialchars($_SESSION['user']['username']) : 'Guest';
+?>
 
+<?php
+// Check if a user is logged in from the session
+$isLoggedIn = isset($_SESSION['user']['username']);
+$username = $isLoggedIn ? htmlspecialchars($_SESSION['user']['username']) : 'Guest';
+$isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'];
+?>
 
 <?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '']); ?>
 

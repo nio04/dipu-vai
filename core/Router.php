@@ -71,6 +71,11 @@ class Router {
     ];
 
     // Blog routes
+    $this->routes['/blogs'] = [
+      'controller' => BlogController::class,
+      'action' => 'viewAllBlogsAsAdmin',
+      'httpMethod' => 'get'
+    ];
     $this->routes['/viewallposts'] = [
       'controller' => BlogController::class,
       'action' => 'viewallposts',
@@ -119,7 +124,7 @@ class Router {
     $this->routes['/blogs/update'] = [
       'controller' => BlogEditController::class,
       'action' => 'update',
-      'httpMethod' => 'get'
+      'httpMethod' => 'post'
     ];
     $this->routes['/blogs/delete'] = [
       'controller' => BlogEditController::class,
@@ -174,22 +179,22 @@ class Router {
     $this->extractParams($uri);
 
     foreach ($this->routes as $routeUri => $routeDetails) {
+
       if ($this->matchUri($routeUri, $this->uri)) {
         if ($httpMethod !== $routeDetails['httpMethod']) {
           throw new \Exception("HTTP method not allowed for this route.");
         }
 
         $controller = new $routeDetails['controller'];
-        [$action, $params] = $this->extractActionAndParams($routeUri, $uri);
-        $action = $routeDetails['action'] ?? $action;
-
-        if (empty($action)) {
-          $action = 'index';
-        }
+        $action = $routeDetails['action'];
+        $action = $routeDetails['action'] ?? 'index';
 
         if (method_exists($controller, $action)) {
           call_user_func_array([$controller, $action], [$this->params]);
         } else {
+          echo ("<pre>");
+          var_dump($routeDetails['controller'], $action);
+          echo ("</pre>");
           throw new \Exception("Action $action not found in controller.");
         }
 
@@ -227,26 +232,5 @@ class Router {
    */
   private function matchUri(string $routeUri, string $requestUri): bool {
     return rtrim($routeUri, '/') === rtrim($requestUri, '/');
-  }
-
-  /**
-   * Extracts action and parameters from the request URI based on the route URI.
-   *
-   * @param string $routeUri
-   * @param string $requestUri
-   * @return array
-   */
-  private function extractActionAndParams(string $routeUri, string $requestUri): array {
-    $routeUri = rtrim($routeUri, '/');
-    $requestUri = rtrim($requestUri, '/');
-
-    if (preg_match("#^$routeUri/?$#", $requestUri)) {
-      $uriSegments = explode('/', trim($requestUri, '/'));
-      $action = $uriSegments[2] ?? null;
-      $params = array_slice($uriSegments, 3);
-      return [$action, $params];
-    }
-
-    return [null, []];
   }
 }

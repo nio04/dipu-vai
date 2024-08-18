@@ -56,30 +56,27 @@ class CategoryController extends Controller {
       $errors = [];
 
       // sanitize
-      $title = $this->sanitizeInput($_POST['title']);
+      $title = $_POST['title'];
       // check if field empty
-      $title = $this->checkEmpty([$title]);
+      // $title = $title;
 
       // set empty field error
-      if (count($title) < 1) {
+      if (strlen($title) < 1) {
         $errors['category_empty_error'] = 'category field can not be empty';
         return $this->view->render('createCategory', ['errors' => $errors]);
       }
       // check if current category exist already
-      $ifExistCategory = $this->category->checkExistCategory(implode($title));
+      // $ifExistCategory = $this->category->checkExistCategory(implode($title));
+      $ifExistCategory = $this->category->checkExistCategory($title);
 
       if ($ifExistCategory) {
         $errors['category_exist_error'] = 'current category already found. it can not be used again';
-        // $title['category'] = $title[0];
-        // echo ("<pre>");
-        // var_dump(['errors' => $errors, 'category' => $title[0]]);
-        // echo ("</pre>");
-        return $this->view->render('createCategory', ['errors' => $errors, 'category' => $title[0]]);
+        return $this->view->render('createCategory', ['errors' => $errors, 'category' => $title]);
       }
 
       // check category create or edit
       if ($categoryStatus === "create") {
-        $this->category->insertCategory(implode($title));
+        $this->category->insertCategory($title);
       } else {
         // category edit
         $this->category->edit($id, $title);

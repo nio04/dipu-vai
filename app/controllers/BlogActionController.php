@@ -79,7 +79,7 @@ class BlogActionController extends Controller {
 
   public function createComment($id) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $commentData = $this->sanitizeInput($_POST['comment']);
+      $commentData = $_POST['comment'];
       // $commentData = $this->checkEmpty([$commentData]);
 
       if ($commentData) {
@@ -113,7 +113,7 @@ class BlogActionController extends Controller {
   function search() {
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
       // sanitize
-      $searchInput = $this->sanitizeInput($_POST['search']);
+      $searchInput = $_POST['search'];
       // $searchInput = $this->checkEmpty(['search' => $searchInput]);
 
 
@@ -132,7 +132,7 @@ class BlogActionController extends Controller {
   }
 
   function sort($id) {
-    $sortInput = $this->sanitizeInput($id);
+    $sortInput = $id;
 
     // save the sorting option in settings session
     $_SESSION['settings']['sortBy'] = $sortInput;
@@ -150,10 +150,10 @@ class BlogActionController extends Controller {
   public function submitBlog() {
     $errors = [];
 
-    $title = $this->sanitizeInput($_POST['title']);
-    $description = $this->sanitizeInput($_POST['description']);
-    $tags = $this->sanitizeInput($_POST['tags']);
-    $category = $this->sanitizeInput($_POST['category']);
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $tags = $_POST['tags'];
+    $category = $_POST['category'];
     $cover_image = $_FILES['cover_image'];
     /**
      * @var bool 

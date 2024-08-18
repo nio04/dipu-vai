@@ -1,20 +1,5 @@
 <?php loadPartials("header") ?>
 
-<?php
-
-
-function vd($data) {
-  $trace = debug_backtrace();
-  $caller = $trace[0];
-  echo '<br><br>' . 'File: ' . $caller['file'] . '&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Line: ' . $caller['line'] . '<br>';
-  echo '<div class="var-dump">' . nl2br(htmlspecialchars(var_export($data, true))) . '</div>';
-}
-
-vd($errors);
-
-
-?>
-
 <div class="w-2/5 mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-12">
   <h2 class="text-2xl font-bold mb-6">Register</h2>
 

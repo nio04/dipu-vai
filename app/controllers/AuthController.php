@@ -88,19 +88,6 @@ class AuthController extends Controller {
     $requiredFields = ['username', 'email', 'password'];
     $empty = $this->isEmpty(['username' => $username, 'email' => $email, 'password' => $password], $requiredFields);
 
-
-    // function vd($data) {
-    //   $trace = debug_backtrace();
-    //   $caller = $trace[0];
-    //   echo '<br><br>' . 'File: ' . $caller['file'] . '&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Line: ' . $caller['line'] . '<br>';
-    //   echo '<div class="var-dump">' . nl2br(htmlspecialchars(var_export($data, true))) . '</div>';
-    // }
-
-    // vd($empty);
-
-
-
-
     if (is_array($empty) && isset($empty[0])) {
       // header('location:/register/load');
       return $this->view->render("register", ['errors' => $empty]);
@@ -135,75 +122,11 @@ class AuthController extends Controller {
 
         header('location: /viewallposts');
       }
-
-
-      // echo ("<pre>");
-      // var_dump($t);
-      // echo ("</pre>");
-
-
-      // try {
-      //   $registerId = $authModel->register($username, $email, $password);
-      //   // get user data by register id
-      //   // set it to session
-      //   header('location:/');
-      // } catch (\PDOException $e) {
-      //   $this->view->render('register', ['errors' => [$e->getMessage()]]);
-
-      // }
-
-      // if ($authModel->isEmailInUse($email)) {
-      //   echo ("<pre>");
-      //   var_dump("variable1");
-      //   echo ("</pre>");
-      //   $this->view->render('register', [
-      //     'error' => 'Email already in use. Please choose a different email.'
-      //   ]);
-      // } else {
-      //   echo ("<pre>");
-      //   var_dump("variable2");
-      //   echo ("</pre>");
-      //   $success = $authModel->register($username, $email, $password);
-      // }
-
-      // Validate user input
-      // if (!$this->validateRequiredFields($_POST, ['username', 'email', 'password'])) {
-      //   $this->view->render('register', ['error' => 'All fields are required.']);
-      //   return;
-      // }
-
-      // if (!$this->validateUsername($username)) {
-      //   $this->view->render('register', ['error' => 'Invalid username.']);
-      //   return;
-      // }
-
-      // if (!$this->validateEmail($email)) {
-      //   $this->view->render('register', ['error' => 'Invalid email format.']);
-      //   return;
-      // }
-
-      // $authModel = new Auth();
-
-      // if ($authModel->isEmailInUse($email)) {
-      //   $this->view->render('register', [
-      //     'error' => 'Email already in use. Please choose a different email.'
-      //   ]);
-      // } else {
-      //   $success = $authModel->register($username, $email, $password);
-
-      //   if ($success) {
-      //     // header('Location: /login');
-      //     exit;
-      //   } else {
-      //     // $this->view->render('register', ['error' => 'Registration failed.']);
-      // }
-      // }
     }
-
-    function logout() {
-      unset($_SESSION['user']);
-      unset($_SESSION['settings']['admin']);
-      header('Location:/');
-    }
+  }
+  function logout() {
+    unset($_SESSION['user']);
+    unset($_SESSION['settings']['admin']);
+    header('Location: /');
   }
 }
