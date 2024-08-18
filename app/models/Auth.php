@@ -31,7 +31,8 @@ class Auth extends Model {
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':password', $password);
     $password = password_hash($password, PASSWORD_BCRYPT);
-    return $stmt->execute();
+    $stmt->execute();
+    return $this->db->lastInsertId();
   }
 
   public function isEmailInUse($email) {

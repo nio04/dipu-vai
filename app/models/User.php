@@ -26,9 +26,9 @@ class User extends Model {
 
   public function getUser($id) {
     $this->db = new Model();
-    $data = ['id' => $id];
+    $data = ['id' => (int) $id];
 
-    return $this->db->query("SELECT username, id FROM users WHERE id = :id", $data, "single");
+    return $this->db->query("SELECT * FROM users WHERE id = :id", $data, "single");
 
     echo ("<pre>");
     // var_dump($t);
