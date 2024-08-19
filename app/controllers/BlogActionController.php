@@ -91,12 +91,6 @@ class BlogActionController extends Controller {
       // sanitize
       $this->sanitize($commentData);
 
-      //  check empty
-      // $emptyCheck = $this->isEmpty([$commentData], ['comment']);
-      // if (is_array($emptyCheck) && isset($emptyCheck[0])) {
-      //   return $this->view->render('blog', ['errors' => $emptyCheck]);
-      // }
-
       if ($commentData) {
         $this->blog->createCommnentForBlog($id, $commentData);
         header('location: /blogs/show/' . $id);
