@@ -9,6 +9,12 @@ use App\Traits\ValidationTrait;
 
 class AuthController extends Controller {
   use ValidationTrait;
+  private $authModel;
+
+  function __construct() {
+    $this->authModel = new Auth();
+    parent::__construct();
+  }
 
   public function index() {
     $this->view->render('login');
@@ -19,7 +25,7 @@ class AuthController extends Controller {
     $this->view->render('login');
   }
 
-  function submit() {
+  function loginSubmit() {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $additionlToken = $_POST['additional_token'];
@@ -101,14 +107,12 @@ class AuthController extends Controller {
       return $this->view->render('register', ['errors' => $validateResults]);
     } else {
       // no invalid data
-      $authModel = new Auth();
-      $checkIfAlreadyInUse = $authModel->isEmailAndUsernameInUse($email, $username);
+      $checkIfAlreadyInUse = $this->authModel->isEmailAndUsernameInUse($email, $username);
 
       if ($checkIfAlreadyInUse) {
         $this->view->render("register", ["errors" => ['email or username already in use']]);
       } else {
-        $userModel = new Auth();
-        $userModel = $userModel->register($username, $email, $password);
+        $userModel = $this->authModel->register($username, $email, $password);
 
         // get user object
         $userData = new User();
@@ -120,7 +124,7 @@ class AuthController extends Controller {
           'username' => $userData->username
         ];
 
-        header('location: /viewallposts');
+        header('location: /login');
       }
     }
   }

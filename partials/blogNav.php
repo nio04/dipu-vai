@@ -67,8 +67,13 @@
       </form>
     </div>
 
+
+    <?php
+    $isLoggedIn = isset($_SESSION['user'][0]->username);
+    $username = $isLoggedIn ? htmlspecialchars($_SESSION['user'][0]->username) : 'Guest';
+    ?>
     <div class="flex items-center space-x-4">
-      <span class="text-xl"><?php echo $username; ?>!</span>
+      <span class="text-xl"><?= $username ?>!</span>
       <?php if ($isLoggedIn): ?>
         <form action="/logout" method="POST" onsubmit="return confirm('Are you sure you want to logout?');">
           <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">

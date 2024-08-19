@@ -25,7 +25,8 @@
                   </a>';
     }
     ?>
-    <span class="text-lg font-bold"><?php echo htmlspecialchars($_SESSION['user']['username']); ?></span>
+
+    <span class="text-lg font-bold"><?php echo htmlspecialchars($_SESSION['user'][0]->username); ?></span>
     <form action="/logout" method="POST" onsubmit="return confirm('Are you sure you want to logout?');">
       <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
         Log out

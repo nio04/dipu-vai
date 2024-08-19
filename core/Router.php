@@ -46,7 +46,7 @@ class Router {
     // Authentication routes
     $this->routes['/login/submit'] = [
       'controller' => AuthController::class,
-      'action' => 'submit',
+      'action' => 'loginSubmit',
       'httpMethod' => 'post'
     ];
     $this->routes['/login'] = [

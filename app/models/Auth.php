@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
-use Core\Model;
-use PDO;
+use App\Traits\DatabaseTrait;
 
-class Auth extends Model {
+class Auth {
+  use DatabaseTrait;
+
+  public function __construct() {
+    $this->connect();
+  }
 
   public function login($username, $password) {
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $data = [
+      "username" => $username,
+    ];
+    $user = $this->query("SELECT * FROM users WHERE username = :username", $data);
 
     // Check if user exists and verify password
-    if ($user && password_verify($password, $user['password'])) {
+    if ($user && password_verify($password, $user[0]->password)) {
       // Return user data if password matches
       return $user;
     } else {
@@ -25,21 +29,21 @@ class Auth extends Model {
   }
 
   public function register($username, $email, $password) {
+    $data = [
+      'username' => $username,
+      'email' => $email,
+      'password' => password_hash($password, PASSWORD_BCRYPT),
+    ];
+
     // Prepare and execute the SQL query
-    $stmt = $this->db->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':password', $password);
-    $password = password_hash($password, PASSWORD_BCRYPT);
-    $stmt->execute();
-    return $this->db->lastInsertId();
+    return $this->query("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)", $data);
   }
 
   public function isEmailAndUsernameInUse($email, $username) {
-    $stmt = $this->db->prepare("SELECT email, username FROM users WHERE email = :email AND username = :username");
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
-    return $stmt->fetchColumn() > 0;
+    $data = [
+      "email" => $email,
+      'username' => $username
+    ];
+    return $this->query("SELECT email, username FROM users WHERE email = :email OR username = :username", $data);
   }
 }
