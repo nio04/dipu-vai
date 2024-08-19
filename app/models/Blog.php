@@ -23,9 +23,9 @@ class Blog {
 
   function sortBy($inputSort) {
     if ($inputSort === "asc") {
-      return $this->sort_asc();
+      return $this->query('SELECT blogs.*, users.username FROM `blogs` INNER JOIN users ON blogs.user_id = users.id ORDER BY blogs.title ASC');
     } else {
-      return $this->sort_desc();
+      return $this->query('SELECT blogs.*, users.username FROM `blogs` INNER JOIN users ON blogs.user_id = users.id ORDER BY blogs.title DESC');
     }
   }
 
@@ -58,6 +58,10 @@ class Blog {
       'blog_id' => $blog_id
     ];
 
+    echo ("<pre>");
+    var_dump($data);
+    echo ("</pre>");
+
 
     // ///////////
     // CHECK
@@ -76,10 +80,10 @@ class Blog {
 
   function getLikeCountForTheBlog($id) {
     $data = [
-      'id' => $id
+      'id' => (int) $id
     ];
 
-    return $this->query('SELECT like_count from blogs WHERE id = :id', $data,);
+    return $this->query('SELECT like_count from blogs WHERE id = :id', $data);
   }
 
   public function likeCountIncreament($id, $count) {
@@ -99,7 +103,7 @@ class Blog {
 
     $data = [
       'user_id' => $_SESSION['user'][0]->id,
-      "blog_id" => $id,
+      "blog_id" => (int) $id,
       "comment" => $comment
     ];
 
@@ -107,7 +111,10 @@ class Blog {
   }
 
   function insertBlogData($data) {
-    return $this->db->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category, image) VALUES (:user_id, :title, :description, :tags, :created_at, :category, :image)", $data);
+    echo ("<pre>");
+    var_dump($data);
+    echo ("</pre>");
+    return $this->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category, image) VALUES (:user_id, :title, :description, :tags, :created_at, :category, :image)", $data);
   }
 
   function deleteTheBlog($id) {

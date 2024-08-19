@@ -74,6 +74,9 @@ class CategoryController extends Controller {
 
       if ($checkIfAlreadyExist) {
         return $this->view->render('createCategory', ['errors' => ['category title already found. can not use this title again'], 'category' => $title]);
+      } else if ($categoryStatus === "edit") {
+        $this->category->updateCategory($id, $title);
+        header("Location: /category");
       } else {
         $this->category->insertCategory($title);
         header("Location: /category");

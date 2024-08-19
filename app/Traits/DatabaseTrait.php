@@ -62,7 +62,9 @@ trait DatabaseTrait {
   /**
    * Perform a join operation between multiple tables.
    * **Usage:**
-   * ```php
+   * 
+
+php
    * $params = [
    *     'tables' => ['users', 'posts'],
    *     'joinConditions' => ['users.id = posts.user_id'],
@@ -73,7 +75,9 @@ trait DatabaseTrait {
    * ];
    * $result = $this->joinQuery($params);
    * // Output: Array of joined rows matching the query.
-   * ```
+   *
+
+
    *
    * @param array $params Associative array of parameters:
    *   - 'tables' (array): List of tables to join, with the first table as the primary table.
@@ -153,7 +157,7 @@ trait DatabaseTrait {
    * ```
    */
   function sort_asc() {
-    return $this->getDb()->prepare("SELECT * FROM blogs ORDER BY title ASC");
+    return $this->getDb()->query("SELECT * FROM blogs ORDER BY title ASC");
   }
 
   /**
@@ -169,7 +173,7 @@ trait DatabaseTrait {
    * ```
    */
   function sort_desc() {
-    return $this->getDb()->prepare("SELECT * FROM blogs ORDER BY title DESC");
+    return $this->getDb()->query("SELECT * FROM blogs ORDER BY title DESC");
   }
 
   /**

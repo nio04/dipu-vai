@@ -52,4 +52,13 @@ class Category {
     ];
     return $this->query("DELETE FROM category WHERE id = :id", $data);
   }
+
+  function updateCategory($id, $title) {
+    $data = [
+      "title" => $title,
+      'id' => (int) $id
+    ];
+
+    return $this->query("UPDATE category SET title = :title WHERE id = :id", $data);
+  }
 }

@@ -199,7 +199,8 @@ class Router {
       }
     }
 
-    throw new \Exception("Route not found.");
+    loadView("pageNotFound");
+    // throw new \Exception("Route not found.");
   }
 
   /**

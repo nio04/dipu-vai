@@ -108,7 +108,7 @@ class BlogActionController extends Controller {
     // get the current like count from table with blog id
     $oldLikeCount = $this->getCountLike($id);
 
-    $LikeCountIncrease = $oldLikeCount->like_count + 1;
+    $LikeCountIncrease = $oldLikeCount[0]->like_count + 1;
 
     // increae the like count to blogs table
     $this->blog->likeCountIncreament($id, $LikeCountIncrease);
@@ -150,11 +150,8 @@ class BlogActionController extends Controller {
     // sort based on user input [asc, desc]
     $sortResult = $this->blog->sortBy($sortInput);
 
-    // add author object to the blog 
-    $sortResult = $this->appendAuthorToBlog($sortResult);
-
     // cleanup uri
-    $this->view->render("viewallposts", ["blogs" => $sortResult, 'sortBy' => $sortInput, 'categories' => $this->categories]);
+    $this->view->render("viewallblogs", ["blogs" => $sortResult, 'sortBy' => $sortInput, 'categories' => $this->categories]);
   }
 
   public function submitBlog($categoriesLists) {
@@ -202,7 +199,7 @@ class BlogActionController extends Controller {
       return $this->view->render('createBlog', ['categories' => $this->categories, 'errors' => $validationResult, 'title' => $title, 'description' => $description, 'tags' => $tags]); // Return validation errors.
     } else {
       $data =
-        ['user_id' => $_SESSION['user']['id'], 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category, 'image' => $cover_image['name']];
+        ['user_id' => $_SESSION['user'][0]->id, 'title' => $title, "description" => $description, "tags" => $tags, "created_at" => timestamp(), "category" => $category, 'image' => $cover_image['name']];
 
       // insert data
       $this->blog->insertBlogData($data);

@@ -54,28 +54,45 @@ class BlogController extends Controller {
   }
 
   public function show($id) {
-
-    // load the post data
-    $blog =  $this->joinQuery([
+    // load blog & author data and join it together
+    $blogAndAuthor =  $this->joinQuery([
       'tables' => ['blogs', 'users'],
-      'joinConditions' => ['blogs.user_id = users.id'],
-      'selectColumns' => ['blogs.*', 'users.username', 'users.email, users.id']
+      'joinConditions' => [
+        'blogs.user_id = users.id',
+      ],
+      'selectColumns' => [
+        'blogs.*',
+        'users.username',
+        'users.email',
+      ],
+      'whereConditions' => [
+        "blogs.id = $id",
+      ]
     ]);
 
+    $commentsAndAuthor =
+      $this->joinQuery([
+        'tables' => ['comments', 'users'],
+        'joinConditions' => [
+          'comments.user_id = users.id',
+        ],
+        'selectColumns' => [
+          'comments.*',
+          'users.username',
+        ],
+        'whereConditions' => [
+          "comments.blog_id = $id",
+        ]
+      ]);
+
     // check if current user alredy liked the blogpost or not
-    $checkLike = $this->blogAction->hasAlreadyLiked($blog[0]->id, $_SESSION['user']['id'] ?? "");
+    $checkLike = $this->blogAction->hasAlreadyLiked($blogAndAuthor[0]->id, $_SESSION['user'][0]->id ?? "");
 
     // set true or false based on the return of $checkLike
     $checkLike = $checkLike ? true : false;
 
-    // load comments
-    $comments = $this->blogAction->loadComments($id);
-
-    // load username for the comments
-    $usernameForComments = $this->blogAction->loadUsernameForComment($comments);
-
     // render specific blog view
-    $this->view->render('blog', ['blog' => $blog, 'comments' => $usernameForComments, 'already_liked' => $checkLike]);
+    $this->view->render('blog', ['blog' => $blogAndAuthor, 'comments' => $commentsAndAuthor, 'already_liked' => $checkLike]);
   }
 
   /**

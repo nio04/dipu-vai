@@ -30,7 +30,7 @@ $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin
           <?php endif ?>
 
           <div class="p-4 flex justify-between items-start">
-            <a href="/blogs/show/<?= $blog->id ?>" class="text-lg font-bold text-gray-700 hover:underline"><?= $blog->title ?></a>
+            <a href="/blogs/show/<?= $blog->id ?>" class="text-lg font-bold text-gray-700 hover:underline max-w-60"><?= $blog->title ?></a>
             <div class="text-sm text-white text-right">
               <p class="text-gray-600"><?= simpleFormatDate($blog->created_at) ?></p>
               <p class="text-gray-600"><?= $blog->username ?></p>

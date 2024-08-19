@@ -118,9 +118,9 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
       <ul class="space-y-4">
         <?php foreach ($comments as $comment): ?>
           <li class="p-4 bg-gray-100 rounded-lg flex flex-col">
-            <p class="text-gray-500 font-bold"><?php echo htmlspecialchars($comment['user']->username); ?></p>
-            <p class="text-gray-800 font-semibold"><?php echo htmlspecialchars($comment['comment']->comment); ?></p>
-            <p class="text-gray-700 mt-2 ml-auto"><?php echo htmlspecialchars($comment['comment']->created_at); ?></p>
+            <p class="text-gray-500 font-bold"><?php echo htmlspecialchars($comment->username); ?></p>
+            <p class="text-gray-800 font-semibold"><?php echo htmlspecialchars($comment->comment); ?></p>
+            <p class="text-gray-700 mt-2 ml-auto"><?php echo htmlspecialchars($comment->created_at); ?></p>
           </li>
         <?php endforeach; ?>
       </ul>
