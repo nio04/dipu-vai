@@ -20,6 +20,8 @@ class BlogActionController extends Controller {
 
   public $blog;
   private $categories;
+  private $defaultSort = 'asc';
+
   public function __construct() {
     $this->blog = new Blog();
     $category = new Category();
@@ -139,12 +141,14 @@ class BlogActionController extends Controller {
       $searchedResults = $this->appendAuthorToBlog($searchedResults);
 
       // header("Location: /viewallposts");
-      $this->view->render("viewallposts", ["blogs" => $searchedResults]);
+      $this->view->render("viewallposts", ["blogs" => $searchedResults, 'categories' => $this->categories, 'sortBy' => $this->defaultSort]);
     }
   }
 
   function sort($id) {
     $sortInput = $id;
+
+    $this->defaultSort = $id;
 
     // save the sorting option in settings session
     $_SESSION['settings']['sortBy'] = $sortInput;
@@ -156,7 +160,7 @@ class BlogActionController extends Controller {
     $sortResult = $this->appendAuthorToBlog($sortResult);
 
     // cleanup uri
-    $this->view->render("viewallposts", ["blogs" => $sortResult]);
+    $this->view->render("viewallposts", ["blogs" => $sortResult, 'sortBy' => $sortInput, 'categories' => $this->categories]);
   }
 
   public function submitBlog($categoriesLists) {
@@ -167,12 +171,6 @@ class BlogActionController extends Controller {
     $tags = $_POST['tags'];
     $category = $_POST['category'];
     $cover_image = $_FILES['cover_image'];
-    /**
-     * @var bool 
-     * true: means image file processing error
-     * false: means image file processing NOT error 
-     */
-    $image_error = true;
 
     // sanitize
     $this->sanitize(['title' => $title, 'description' => $description, 'tags' => $tags, 'category' => $category,]);

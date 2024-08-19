@@ -61,7 +61,7 @@ class CategoryController extends Controller {
       // sanitize
       $title = $_POST['title'];
       // check if field empty
-      $title = $this->sanitize($title);
+      $title = $this->sanitize($title,);
 
       // set empty field error
       $emptyCheck = $this->isEmpty(['title' => $title], ['title']);

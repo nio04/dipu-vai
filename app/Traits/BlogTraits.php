@@ -6,6 +6,7 @@ use App\Models\Blog;
 
 trait BlogTraits {
   public $blog;
+  public $getAllTheBlogs;
 
   public function __construct() {
     $this->blog = new Blog();
@@ -44,5 +45,9 @@ trait BlogTraits {
     }
 
     return $authorNames;
+  }
+
+  function getAllTheBlogs() {
+    return $this->getAllTheBlogs = $this->blog->getAllBlogs();
   }
 }

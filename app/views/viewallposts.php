@@ -11,7 +11,7 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['user']['username']) : 'Gue
 $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'];
 ?>
 
-<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '', 'categories' => $categories]); ?>
+<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '', 'categories' => $categories, 'sortBy' => $sortBy]); ?>
 
 <!-- Blog Posts -->
 <div class="grid grid-cols-3 gap-6 px-16 p-16">
@@ -20,9 +20,17 @@ $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin
       <div class="">
         <!-- Blog Card Start -->
         <div class="bg-blue-white rounded-lg shadow-md overflow-hidden">
-          <div class="relative h-40 w-full max-w-full object-cover">
-            <img src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->image ?>" class="absolute top-0 left-0 w-full h-full object-cover">
-          </div>
+          <?php $cover_image = $blog->image; ?>
+          <?php if (strlen($cover_image) > 0): ?>
+            <div class="relative h-40 w-full max-w-full object-cover">
+              <img class="absolute top-0 left-0 w-full h-full object-cover" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
+            </div>
+          <?php else: ?>
+            <div class="relative h-40 w-full max-w-full object-cover">
+              <img class="absolute top-0 left-0 w-full h-full object-cover" src="<?= loadImagePath("cover_images/cover.jpg") ?>" alt="<?= $blog->title ?>">
+            </div>
+          <?php endif ?>
+
           <div class="p-4 flex justify-between items-start">
             <a href="/blogs/show/<?= $blog->id ?>" class="text-lg font-bold text-gray-700 hover:underline"><?= $blog->title ?></a>
             <div class="text-sm text-white text-right">

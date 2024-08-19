@@ -24,6 +24,7 @@ class BlogController extends Controller {
   public $blogEdit;
   public $category;
   public $categoriesList;
+  private $defaultSort = 'asc';
 
   public function __construct() {
     $this->blog = new Blog();
@@ -44,10 +45,12 @@ class BlogController extends Controller {
   public function viewallposts() {
     $allBlogs = $this->blog->getAllBlogs();
 
+    $this->defaultSort = $_SESSION['settings']['sortBy'];
+
     // add author object to the blog object [append]
     $allBlogs = $this->appendAuthorToBlog($allBlogs,);
 
-    $this->view->render('viewallposts', ['blogs' => $allBlogs, 'categories' => $this->categoriesList]);
+    $this->view->render('viewallposts', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort]);
   }
 
   public function show($id) {

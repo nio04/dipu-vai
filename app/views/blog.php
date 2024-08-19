@@ -24,9 +24,16 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
   </div>
 
   <!-- cover image -->
-  <div class="relative h-80 my-12">
-    <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
-  </div>
+  <?php $cover_image = $blog->image; ?>
+  <?php if (strlen($cover_image) > 0): ?>
+    <div class="relative h-80 my-12">
+      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
+    </div>
+  <?php else: ?>
+    <div class="relative h-80 my-12">
+      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/cover.jpg") ?>" alt="<?= $blog->title ?>">
+    </div>
+  <?php endif ?>
 
 
   <!-- Blog Title -->

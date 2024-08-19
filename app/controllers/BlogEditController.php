@@ -46,7 +46,6 @@ class BlogEditController extends Controller {
     // SANITIZE
     $this->sanitize([$blogId, $title, $description, $tags]);
 
-
     // check empty
     $requiredFields = ['title', 'description'];
     $emptyCheck = $this->isEmpty(['title' => $title, 'description' => $description,], $requiredFields);

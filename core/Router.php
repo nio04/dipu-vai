@@ -192,9 +192,6 @@ class Router {
         if (method_exists($controller, $action)) {
           call_user_func_array([$controller, $action], [$this->params]);
         } else {
-          echo ("<pre>");
-          var_dump($routeDetails['controller'], $action);
-          echo ("</pre>");
           throw new \Exception("Action $action not found in controller.");
         }
 
