@@ -76,9 +76,9 @@ class Router {
       'action' => 'viewAllBlogsAsAdmin',
       'httpMethod' => 'get'
     ];
-    $this->routes['/viewallposts'] = [
+    $this->routes['/viewallblogs'] = [
       'controller' => BlogController::class,
-      'action' => 'viewallposts',
+      'action' => 'viewallblogs',
       'httpMethod' => 'get'
     ];
     $this->routes['/blogs/search'] = [

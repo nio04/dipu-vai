@@ -16,7 +16,7 @@
           </a>
 
           <!-- View All Blog Posts as User Card -->
-          <a href="/viewallposts" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
+          <a href="/viewallblogs" class="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105">
             <h2 class="text-2xl font-semibold mb-2">View All Blog Posts as User</h2>
             <p class="text-lg mt-6">Browse blog posts as a regular user.</p>
           </a>

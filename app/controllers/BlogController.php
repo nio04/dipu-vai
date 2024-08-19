@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Traits\DatabaseTrait;
 use App\Traits\ValidationTrait;
 use App\Traits\BlogTraits;
 use Core\Controller;
@@ -18,6 +19,7 @@ use App\Controllers\BlogEditController;
 class BlogController extends Controller {
   use ValidationTrait;
   use BlogTraits;
+  use DatabaseTrait;
 
   public $blog;
   public $blogAction;
@@ -32,6 +34,7 @@ class BlogController extends Controller {
     $this->category = new CategoryController();
     $this->blogEdit = new BlogEditController();
     $this->categoriesList = $this->category->load();
+    $this->connect();
     parent::__construct();
   }
 
@@ -42,29 +45,25 @@ class BlogController extends Controller {
   }
 
   // not for dashboard
-  public function viewallposts() {
+  public function viewallblogs() {
     $allBlogs = $this->blog->getAllBlogs();
 
     $this->defaultSort = $_SESSION['settings']['sortBy'];
 
-    // add author object to the blog object [append]
-    $allBlogs = $this->appendAuthorToBlog($allBlogs,);
-
-    $this->view->render('viewallposts', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort]);
+    $this->view->render('viewallblogs', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort]);
   }
 
   public function show($id) {
 
     // load the post data
-    $blog = $this->blog->getTheBlog($id);
-
-    // load author name
-    $authorName = $this->getBlogAuthorName([$blog->user_id]);
-
-    $blog->author = $authorName[0];
+    $blog =  $this->joinQuery([
+      'tables' => ['blogs', 'users'],
+      'joinConditions' => ['blogs.user_id = users.id'],
+      'selectColumns' => ['blogs.*', 'users.username', 'users.email, users.id']
+    ]);
 
     // check if current user alredy liked the blogpost or not
-    $checkLike = $this->blogAction->hasAlreadyLiked($blog->id, $_SESSION['user']['id'] ?? "");
+    $checkLike = $this->blogAction->hasAlreadyLiked($blog[0]->id, $_SESSION['user']['id'] ?? "");
 
     // set true or false based on the return of $checkLike
     $checkLike = $checkLike ? true : false;

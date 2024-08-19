@@ -40,7 +40,7 @@
       </li>
       <!-- Another link -->
       <li>
-        <a href="/viewallposts" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 underline underline-offset-8">
+        <a href="/viewallblogs" class="block text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 underline underline-offset-8">
           View All Posts as user
         </a>
       </li>

@@ -103,7 +103,7 @@ class BlogActionController extends Controller {
 
   public function like($id) {
     // register the like to the database
-    $this->blog->registerLike($id, $_SESSION['user']['id']);
+    $this->blog->registerLike($id, $_SESSION['user'][0]->id);
 
     // get the current like count from table with blog id
     $oldLikeCount = $this->getCountLike($id);
@@ -134,7 +134,7 @@ class BlogActionController extends Controller {
       // add author name to the blog posts
       $searchedResults = $this->appendAuthorToBlog($searchedResults);
 
-      // header("Location: /viewallposts");
+      // header("Location: /viewallblogs");
       $this->view->render("viewallposts", ["blogs" => $searchedResults, 'categories' => $this->categories, 'sortBy' => $this->defaultSort]);
     }
   }

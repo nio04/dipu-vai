@@ -33,7 +33,7 @@ $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin
             <a href="/blogs/show/<?= $blog->id ?>" class="text-lg font-bold text-gray-700 hover:underline"><?= $blog->title ?></a>
             <div class="text-sm text-white text-right">
               <p class="text-gray-600"><?= simpleFormatDate($blog->created_at) ?></p>
-              <p class="text-gray-600"><?= $blog->author->username ?></p>
+              <p class="text-gray-600"><?= $blog->username ?></p>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@ $isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin
         <p class="text-lg text-gray-500">
           We couldn't find any blog posts that match your search.
         </p>
-        <a href="/viewallposts" class="mt-6 inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition">
+        <a href="/viewallblogs" class="mt-6 inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition">
           Go Back to Home
         </a>
       </div>

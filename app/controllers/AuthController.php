@@ -70,7 +70,7 @@ class AuthController extends Controller {
         $_SESSION['user'] = $user;
         $_SESSION['settings']['admin'] = false;
         // redirect to view all posts
-        return header("location: /viewallposts");
+        return header("location: /viewallblogs");
       } else {
         $this->view->render("login", ['errors' => ['invalid username or password']]);
       }

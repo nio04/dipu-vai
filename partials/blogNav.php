@@ -2,7 +2,7 @@
   <!-- Left Side -->
   <div class="col-span-4 flex items-center space-x-4">
     <!-- Logo Link -->
-    <a href="/viewallposts" class="text-3xl font-bold text-yellow-400">
+    <a href="/viewallblogs" class="text-3xl font-bold text-yellow-400">
       Bloggies
     </a>
 

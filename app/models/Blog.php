@@ -2,43 +2,46 @@
 
 namespace App\Models;
 
-use Core\Model;
-use PDO;
-use App\Traits\BlogTraits;
+use App\Traits\DatabaseTrait;
 
 class Blog {
-  private $db;
+  use DatabaseTrait;
 
   public function __construct() {
-    $this->db = new Model();
+    $this->connect(); // Initialize connection
   }
+
+  private $db;
 
   function searchBlog($blogTitle) {
     $data = [
       "title" => "%" . $blogTitle . "%",
     ];
 
-    return $this->db->query("SELECT * FROM blogs WHERE title LIKE :title", $data, 'all');
+    return $this->query("SELECT * FROM blogs WHERE title LIKE :title", $data);
   }
 
   function sortBy($inputSort) {
     if ($inputSort === "asc") {
-      return $this->db->sort_asc();
+      return $this->sort_asc();
     } else {
-      return $this->db->sort_desc();
+      return $this->sort_desc();
     }
   }
 
   public function getAllBlogs() {
-    return $this->db->query("SELECT * from blogs", [], 'all');
+    return $this->joinQuery([
+      'tables' => ['blogs', 'users'],
+      'joinConditions' => ['blogs.user_id = users.id'],
+      'selectColumns' => ['blogs.*', 'users.username', 'users.email']
+    ]);
   }
 
   public function getTheBlog($id) {
-
     $data = [
       'id' => $id
     ];
-    return $this->db->query('SELECT * FROM blogs WHERE id = :id', $data, 'single');
+    return $this->query('SELECT * FROM blogs WHERE id = :id', $data);
   }
 
   public function fetchAuthorName($id) {
@@ -46,7 +49,7 @@ class Blog {
       'id' => $id
     ];
 
-    return $this->db->query("SELECT username, id FROM users WHERE id = :id", $data, "single");
+    return $this->query("SELECT username, id FROM users WHERE id = :id", $data);
   }
 
   function registerLike($blog_id, $user_id) {
@@ -55,7 +58,11 @@ class Blog {
       'blog_id' => $blog_id
     ];
 
-    return $this->db->likeBlogPost($data);
+
+    // ///////////
+    // CHECK
+    ///////////
+    return $this->likeBlogPost($data);
   }
 
   function checkLiked($blog_id, $user_id) {
@@ -64,7 +71,7 @@ class Blog {
       'user_id' => $user_id
     ];
 
-    return $this->db->query("SELECT id FROM likes WHERE user_id = :user_id AND blog_id = :blog_id", $data, "single");
+    return $this->query("SELECT id FROM likes WHERE user_id = :user_id AND blog_id = :blog_id", $data);
   }
 
   function getLikeCountForTheBlog($id) {
@@ -72,12 +79,12 @@ class Blog {
       'id' => $id
     ];
 
-    return $this->db->query('SELECT like_count from blogs WHERE id = :id', $data, 'single');
+    return $this->query('SELECT like_count from blogs WHERE id = :id', $data,);
   }
 
   public function likeCountIncreament($id, $count) {
     $data = ['id' => $id, 'like_count' => (int) $count];
-    return $this->db->query("UPDATE blogs SET like_count = :like_count WHERE id = :id", $data);
+    return $this->query("UPDATE blogs SET like_count = :like_count WHERE id = :id", $data);
   }
 
   public function loadCommentForBlog($id) {
@@ -85,18 +92,18 @@ class Blog {
       'blog_id' => $id,
     ];
 
-    return $this->db->query("SELECT * FROM comments WHERE blog_id = :blog_id", $data, "all");
+    return $this->query("SELECT * FROM comments WHERE blog_id = :blog_id", $data);
   }
 
   public function createCommnentForBlog($id, $comment) {
 
     $data = [
-      'user_id' => $_SESSION['user']['id'],
+      'user_id' => $_SESSION['user'][0]->id,
       "blog_id" => $id,
       "comment" => $comment
     ];
 
-    return $this->db->query("INSERT INTO comments (user_id, blog_id, comment) VALUES (:user_id, :blog_id, :comment)", $data);
+    return $this->query("INSERT INTO comments (user_id, blog_id, comment) VALUES (:user_id, :blog_id, :comment)", $data);
   }
 
   function insertBlogData($data) {
@@ -107,7 +114,7 @@ class Blog {
     $data = [
       'id' => $id
     ];
-    return $this->db->query('DELETE FROM blogs WHERE id = :id', $data);
+    return $this->query('DELETE FROM blogs WHERE id = :id', $data);
   }
 
   function update($id, $title, $description, $tags) {
@@ -119,11 +126,7 @@ class Blog {
       "tags" => $tags,
     ];
 
-    echo ("<pre>");
-    var_dump($data);
-    echo ("</pre>");
-
-    $this->db->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
+    $this->query("UPDATE blogs SET title = :title, description = :description, tags = :tags WHERE id = :id", $data);
   }
 
   function handleFileUpload($file, $targetDir, $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']) {

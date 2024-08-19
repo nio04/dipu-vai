@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
-use COre\Model;
+use App\Traits\DatabaseTrait;
 
 class Category {
-  private $db;
+  use DatabaseTrait;
 
   public function __construct() {
-    $this->db = new Model();
+    $this->connect();
   }
-
   function getCategoryTitles() {
-    return $this->db->query("SELECT * FROM category", [], "all");
+    return $this->query("SELECT * FROM category", [],);
   }
 
   function checkExistCategory($title) {
     $data = [
       "title" => $title,
     ];
-    return $this->db->query("SELECT title FROM category WHERE title = :title", $data, 'single');
+    return $this->query("SELECT title FROM category WHERE title = :title", $data);
   }
 
   function getCategoryDetail($id) {
@@ -27,14 +26,14 @@ class Category {
       'id' => (int) $id
     ];
 
-    return $this->db->query("SELECT * FROM category where id = :id", $data, 'single');
+    return $this->query("SELECT * FROM category where id = :id", $data);
   }
 
   function insertCategory($title) {
     $data = [
       "title" => $title,
     ];
-    return $this->db->query("INSERT INTO category (title) VALUES (:title)", $data);
+    return $this->query("INSERT INTO category (title) VALUES (:title)", $data);
   }
 
   function edit($id, $title) {
@@ -43,7 +42,7 @@ class Category {
       'id' => (int) $id
     ];
 
-    return $this->db->query("UPDATE category SET title = :title WHERE id = :id", $data);
+    return $this->query("UPDATE category SET title = :title WHERE id = :id", $data);
   }
 
 
@@ -51,6 +50,6 @@ class Category {
     $data = [
       "id" => $id
     ];
-    return $this->db->query("DELETE FROM category WHERE id = :id", $data);
+    return $this->query("DELETE FROM category WHERE id = :id", $data);
   }
 }
