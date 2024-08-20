@@ -11,8 +11,9 @@ $router = new Router();
 $router->autoRegisterRoute();
 $router->dispatch();
 
-// unset($_SESSION['user']);
+// unset($_SESSION['users']);
 // unset($_SESSION['settings']);
+// unset($_SESSION['nested_key']);
 // session_destroy();
 
 // echo ("<pre>");

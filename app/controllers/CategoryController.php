@@ -26,8 +26,8 @@ class CategoryController extends Controller {
   }
 
   function index() {
-
-    $this->view->render('category', ['categories' => $this->categories]);
+    // $this->view->render('category', ['categories' => $this->categories]);
+    return $this->view->render('category', ['categories' => $this->categories, 'showUserName' => $this->username, 'isAdmin' => $this->isAdmin, 'isLoggedIn' => $this->isLoggedIn, 'showCategoryBtn' => $this->setShowCreateNewCategory]);
   }
 
   function load() {
@@ -43,7 +43,7 @@ class CategoryController extends Controller {
     // get data from DB with ID
     $categoryDetail = $this->category->getCategoryDetail($id);
 
-    $this->view->render("editCategory", ["category" => $categoryDetail]);
+    return $this->view->render("editCategory", ["category" => $categoryDetail, 'showUserName' => $this->showUserName]);
   }
 
   function delete($id) {

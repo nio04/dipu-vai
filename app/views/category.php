@@ -1,5 +1,5 @@
 <?php loadPartials("header") ?>
-<?php loadPartials("navDashboard") ?>
+<?php loadPartials("navDashboard", ["showCategoryBtn" => $showCategoryBtn, 'showUserName' => $showUserName]) ?>
 
 
 <!-- Sidebar and Main Container -->

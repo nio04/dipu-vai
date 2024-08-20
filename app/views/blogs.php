@@ -1,5 +1,5 @@
 <?php loadPartials("header") ?>
-<?php loadPartials("navDashboard") ?>
+<?php loadPartials("navDashboard", ['showUserName' => $showUserName]) ?>
 
 <div class="flex w-full h-screen">
   <?php loadPartials("asideDashboard") ?>

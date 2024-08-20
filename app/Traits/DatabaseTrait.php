@@ -104,6 +104,7 @@ php
     $whereConditions = $params['whereConditions'] ?? [];
     $orderBy = $params['orderBy'] ?? '';
     $limit = $params['limit'] ?? '';
+    $bindings = $params['bindings'] ?? [];
 
     // Validate required parameters
     if (empty($tables) || empty($joinConditions)) {
@@ -136,13 +137,21 @@ php
       $sql .= " LIMIT $limit";
     }
 
-    // Prepare and execute the SQL statement
+    // Prepare the SQL statement
     $stmt = $this->getDb()->prepare($sql);
+
+    // Bind parameters if any are used in the WHERE conditions
+    foreach ($bindings as $placeholder => $value) {
+      $stmt->bindValue($placeholder, $value);
+    }
+
+    // Execute the SQL statement
     $stmt->execute();
 
     // Return the results as an associative array
     return $stmt->fetchAll(PDO::FETCH_OBJ);
   }
+
 
   /**
    * Sort the 'blogs' table in ascending order by the title.

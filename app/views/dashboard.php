@@ -1,5 +1,5 @@
 <?php loadPartials("header") ?>
-<?php loadPartials("navDashboard") ?>
+<?php loadPartials("navDashboard", ["showCreatePostBtn" => $showCreatePostBtn, 'showUserName' => $showUserName]) ?>
 
 <!-- Sidebar and Main Container -->
 <div class="flex w-full h-screen">

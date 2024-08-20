@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DatabaseTrait;
+use App\Traits\SessionTrait;
 
 class Blog {
   use DatabaseTrait;
+  use SessionTrait;
 
   public function __construct() {
     $this->connect(); // Initialize connection
@@ -15,11 +17,19 @@ class Blog {
 
   function searchBlog($blogTitle) {
     $data = [
-      "title" => "%" . $blogTitle . "%",
+      'title' => "%$blogTitle%" // Correct wildcard placement
     ];
 
-    return $this->query("SELECT * FROM blogs WHERE title LIKE :title", $data);
+    // SQL query with corrected syntax
+    return $this->query(
+      'SELECT blogs.*, users.username 
+        FROM blogs 
+        INNER JOIN users ON blogs.user_id = users.id 
+        WHERE blogs.title LIKE :title',
+      $data
+    );
   }
+
 
   function sortBy($inputSort) {
     if ($inputSort === "asc") {
@@ -87,7 +97,7 @@ class Blog {
   }
 
   public function likeCountIncreament($id, $count) {
-    $data = ['id' => $id, 'like_count' => (int) $count];
+    $data = ['id' =>  (int) $id, 'like_count' => (int) $count];
     return $this->query("UPDATE blogs SET like_count = :like_count WHERE id = :id", $data);
   }
 
@@ -102,7 +112,7 @@ class Blog {
   public function createCommnentForBlog($id, $comment) {
 
     $data = [
-      'user_id' => $_SESSION['user'][0]->id,
+      'user_id' => $this->getSession(['user', 'id']),
       "blog_id" => (int) $id,
       "comment" => $comment
     ];
@@ -111,9 +121,6 @@ class Blog {
   }
 
   function insertBlogData($data) {
-    echo ("<pre>");
-    var_dump($data);
-    echo ("</pre>");
     return $this->query("INSERT INTO blogs (user_id, title, description, tags, created_at, category, image) VALUES (:user_id, :title, :description, :tags, :created_at, :category, :image)", $data);
   }
 

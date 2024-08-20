@@ -67,11 +67,6 @@
       </form>
     </div>
 
-
-    <?php
-    $isLoggedIn = isset($_SESSION['user'][0]->username);
-    $username = $isLoggedIn ? htmlspecialchars($_SESSION['user'][0]->username) : 'Guest';
-    ?>
     <div class="flex items-center space-x-4">
       <span class="text-xl"><?= $username ?>!</span>
       <?php if ($isLoggedIn): ?>

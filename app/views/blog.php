@@ -1,9 +1,11 @@
 <?php
 
-$tags = $blog[0]->tags;
+
+$tags = $blog->tags;
 $tags = explode(",", $tags);
 
 if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === true) {
+  // if () {
   $goBackTo = '/blogs';
 } else {
   $goBackTo = '/';
@@ -21,28 +23,28 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
   </div>
 
   <!-- cover image -->
-  <?php $cover_image = $blog[0]->image; ?>
+  <?php $cover_image = $blog->image; ?>
   <?php if (strlen($cover_image) > 0): ?>
     <div class="relative h-80 my-12">
-      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/") . $blog[0]->image ?>" alt="<?= $blog[0]->title ?>">
+      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/") . $blog->image ?>" alt="<?= $blog->title ?>">
     </div>
   <?php else: ?>
     <div class="relative h-80 my-12">
-      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/cover.jpg") ?>" alt="<?= $blog[0]->title ?>">
+      <img class="absolute top-0 left-0 w-full h-full object-cover rounded-md" src="<?= loadImagePath("cover_images/cover.jpg") ?>" alt="<?= $blog->title ?>">
     </div>
   <?php endif ?>
 
 
   <!-- Blog Title -->
-  <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= $blog[0]->title ?></h1>
+  <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= $blog->title ?></h1>
 
   <!-- Meta Information -->
-  <p class="text-gray-500 text-sm mb-2">Created at: <span class="text-gray-500"><?= additionalDateFormatter($blog[0]->created_at)  ?></span> </p>
-  <p class="text-gray-500 text-sm mb-2 -mt-2">Author name: <span class="text-gray-500"><?= $blog[0]->username ?></span> </p>
+  <p class="text-gray-500 text-sm mb-2">Created at: <span class="text-gray-500"><?= additionalDateFormatter($blog->created_at)  ?></span> </p>
+  <p class="text-gray-500 text-sm mb-2 -mt-2">Author name: <span class="text-gray-500"><?= $blog->username ?></span> </p>
 
   <!-- Blog Description -->
   <div class="text-gray-700 leading-relaxed my-6">
-    <?= $blog[0]->description ?>
+    <?= $blog->description ?>
   </div>
 
   <!-- Tags -->
@@ -61,7 +63,7 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
   <?php if (isset($_SESSION['user'])): ?>
     <!-- like container -->
     <div class="flex items-center space-x-2 mt-8">
-      <a href="<?php echo $isLiked ? 'javascript:void(0);' : '/blogs/like/' . $blog[0]->id; ?>"
+      <a href="<?php echo $isLiked ? 'javascript:void(0);' : '/blogs/like/' . $blog->id; ?>"
         class="inline-block px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-300 
    <?php echo $isLiked ? 'bg-green-500 cursor-not-allowed' : 'bg-gray-400 hover:bg-gray-500'; ?>"
         <?php echo $isLiked ? 'aria-disabled="true" tabindex="-1"' : ''; ?>>
@@ -71,7 +73,7 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
       <!-- make the link disable so when $isliked is true otherwise do not disable it -->
       <!-- Like Count -->
       <span class="text-lg font-semibold text-gray-700">
-        <?php echo $blog[0]->like_count; ?> Like<?php echo $blog[0]->like_count == 1 ? '' : 's'; ?>
+        <?php echo $blog->like_count; ?> Like<?php echo $blog->like_count == 1 ? '' : 's'; ?>
       </span>
     </div>
 
@@ -85,7 +87,7 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
 
   <?php if (isset($_SESSION['user'])): ?>
     <!-- Comment Container -->
-    <form action="/blogs/createComment/<?php echo $blog[0]->id ?>" method="POST" class="mt-16 mb-16 p-4 bg-white rounded-lg shadow-lg flex flex-col">
+    <form action="/blogs/createComment/<?php echo $blog->id ?>" method="POST" class="mt-16 mb-16 p-4 bg-white rounded-lg shadow-lg flex flex-col">
       <!-- Write Comment Section -->
       <h4 class="text-xl font-semibold text-gray-800 mb-4">Write Comment</h4>
 
@@ -104,7 +106,6 @@ if (isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'] === 
     <!-- Message for Non-Logged-In Users -->
     <p class="text-gray-700 text-xl font-semibold mt-16 mb-16">Please <a href="/login" class="text-blue-500 hover:underline">log in</a> to add a comment.</p>
   <?php endif; ?>
-
 
   <!-- Existing Comments Section -->
   <div class="mt-8 p-4 bg-white rounded-lg shadow-lg">

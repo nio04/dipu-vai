@@ -9,24 +9,19 @@
     <!-- create new post -->
     <?php
     // Check if the user is logged in and the URI is '/blogs'
-    if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/blogs' || $_SERVER['REQUEST_URI'] === '/dashboard') {
-      echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
-                    Create A New Post
-                  </a>';
+    if (isset($showCreatePostBtn)) {
+      echo '<a href="/blogs/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">Create A New Post</a>';
     }
     ?>
 
     <!-- create new category -->
     <?php
-    // Check if the user is logged in and the URI is '/blogs'
-    if (isset($_SESSION['user']) && $_SERVER['REQUEST_URI'] === '/category') {
-      echo '<a href="/category/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">
-                    Create New Category
-                  </a>';
+    if (isset($showCategoryBtn)) {
+      echo '<a href="/category/create" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-12">Create New Category</a>';
     }
     ?>
 
-    <span class="text-lg font-bold"><?php echo htmlspecialchars($_SESSION['user'][0]->username); ?></span>
+    <span class="text-lg font-bold"><?php echo htmlspecialchars($showUserName); ?></span>
     <form action="/logout" method="POST" onsubmit="return confirm('Are you sure you want to logout?');">
       <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
         Log out

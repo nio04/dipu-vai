@@ -6,9 +6,11 @@ use App\Models\User;
 use Core\Controller;
 use App\Models\Auth;
 use App\Traits\ValidationTrait;
+use App\Traits\SessionTrait;
 
 class AuthController extends Controller {
   use ValidationTrait;
+  use SessionTrait;
   private $authModel;
 
   function __construct() {
@@ -37,9 +39,9 @@ class AuthController extends Controller {
     $isAdmin = $additionlToken === "1234" ? true : false;
 
     if ($isAdmin) {
-      $_SESSION['settings']['admin'] = true;
+      $this->setSession(['settings', 'admin'], 'true');
     } else {
-      $_SESSION['settings']['admin'] = false;
+      $this->setSession(['settings', 'admin'], 'false');
     }
 
     // check if empty
@@ -63,12 +65,12 @@ class AuthController extends Controller {
 
       if ($user && $isAdmin) {
         // redirect to dashboard
-        $_SESSION['user'] = $user;
-        $_SESSION['settings']['admin'] = true;
+        $this->setSession(['settings', 'admin'], 'true');
+        $this->setSession('user', $user[0]);
         header('location: /dashboard');
       } else if ($user && !$isAdmin) {
-        $_SESSION['user'] = $user;
-        $_SESSION['settings']['admin'] = false;
+        $this->setSession(['settings', 'admin'], 'false');
+        $this->setSession('user', $user[0]);
         // redirect to view all posts
         return header("location: /viewallblogs");
       } else {
@@ -118,19 +120,27 @@ class AuthController extends Controller {
         $userData = new User();
         $userData = $userData->getUser($userModel);
 
-        $_SESSION['user'] = [
-          'id' => $userData->id,
-          'email' => $userData->email,
-          'username' => $userData->username
-        ];
+        echo ("<pre>");
+        var_dump($userData);
+        echo ("</pre>");
+
+        $this->setSession('user', ['id' => $userData[0]->id, 'email' => $userData[0]->email, 'username' => $userData[0]->username]);
+
+        // $_SESSION['user'] = [
+        //   'id' => $userData->id,
+        //   'email' => $userData->email,
+        //   'username' => $userData->username
+        // ];
 
         header('location: /login');
       }
     }
   }
   function logout() {
-    unset($_SESSION['user']);
-    unset($_SESSION['settings']['admin']);
+    $this->removeSession('user');
+    $this->removeSession('settings');
+    // unset($_SESSION['user']);
+    // unset($_SESSION['settings']['admin']);
     header('Location: /');
   }
 }

@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Traits\DatabaseTrait;
+use App\Traits\SessionTrait;
 use App\Traits\ValidationTrait;
-use App\Traits\BlogTraits;
 use Core\Controller;
 use App\Models\Blog;
 use App\Controllers\CategoryController;
@@ -18,8 +18,8 @@ use App\Controllers\BlogEditController;
 
 class BlogController extends Controller {
   use ValidationTrait;
-  use BlogTraits;
   use DatabaseTrait;
+  use SessionTrait;
 
   public $blog;
   public $blogAction;
@@ -41,16 +41,16 @@ class BlogController extends Controller {
   // for dashboard
   public function viewAllBlogsAsAdmin() {
     $allBlogs = $this->blog->getAllBlogs();
-    return $this->view->render('blogs', ['blogs' => $allBlogs]);
+    return $this->view->render('blogs', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort, 'username' => $this->username, 'isAdmin' => $this->isAdmin, 'isLoggedIn' => $this->isLoggedIn, 'showUserName' => $this->showUserName]);
   }
 
   // not for dashboard
   public function viewallblogs() {
     $allBlogs = $this->blog->getAllBlogs();
 
-    $this->defaultSort = $_SESSION['settings']['sortBy'];
+    $this->defaultSort = $this->getSession(['settings', 'sortBy']);
 
-    $this->view->render('viewallblogs', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort]);
+    $this->view->render('viewallblogs', ['blogs' => $allBlogs, 'categories' => $this->categoriesList, 'sortBy' => $this->defaultSort, 'username' => $this->username, 'isAdmin' => $this->isAdmin, 'isLoggedIn' => $this->isLoggedIn]);
   }
 
   public function show($id) {
@@ -86,13 +86,14 @@ class BlogController extends Controller {
       ]);
 
     // check if current user alredy liked the blogpost or not
-    $checkLike = $this->blogAction->hasAlreadyLiked($blogAndAuthor[0]->id, $_SESSION['user'][0]->id ?? "");
+    // $checkLike = $this->blogAction->hasAlreadyLiked($blogAndAuthor[0]->id, $_SESSION['user'][0]->id ?? "");
+    $checkLike = $this->blogAction->hasAlreadyLiked($blogAndAuthor[0]->id, $this->getSession(['user', 'id']));
 
     // set true or false based on the return of $checkLike
     $checkLike = $checkLike ? true : false;
 
     // render specific blog view
-    $this->view->render('blog', ['blog' => $blogAndAuthor, 'comments' => $commentsAndAuthor, 'already_liked' => $checkLike]);
+    $this->view->render('blog', ['blog' => $blogAndAuthor[0], 'comments' => isset($commentsAndAuthor[0]) ? $commentsAndAuthor : [], 'already_liked' => $checkLike]);
   }
 
   /**

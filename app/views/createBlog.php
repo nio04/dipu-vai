@@ -1,5 +1,5 @@
 <?php loadPartials("header") ?>
-<?php loadPartials("navDashboard") ?>
+<?php loadPartials("navDashboard", ['showUserName' => $showUserName]) ?>
 
 <?php $errors = $errors ?? [] ?>
 <?php $title = $title ?? "" ?>

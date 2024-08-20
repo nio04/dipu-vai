@@ -1,15 +1,7 @@
 <?php loadPartials("header") ?>
 <!-- Navbar -->
-<?php
-// Check if a user is logged in from the session
-$isLoggedIn = isset($_SESSION['user'][0]->username);
-$username = $isLoggedIn ? htmlspecialchars($_SESSION['user'][0]->username) : 'Guest';
 
-// Check if a user is logged in from the session
-$isAdmin = isset($_SESSION['settings']['admin']) && $_SESSION['settings']['admin'];
-?>
-
-<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, '', 'categories' => $categories, 'sortBy' => $sortBy]); ?>
+<?php loadPartials("blogNav", ['isAdmin' => $isAdmin, 'username' => $username, 'isLoggedIn' => $isLoggedIn, 'categories' => $categories, 'sortBy' => $sortBy]); ?>
 
 <!-- Blog Posts -->
 <div class="grid grid-cols-3 gap-6 px-16 p-16">
